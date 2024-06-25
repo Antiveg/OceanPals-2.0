@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import EventCard from './EventCard';
+import { Loader } from '@googlemaps/js-api-loader';
 
 const events = [
-  // Sample events data
   {
     EventName: 'Ancol Beach Cleanup',
     EventLocation: 'Ancol',
@@ -37,13 +37,12 @@ const events = [
 
 const Event: React.FC = () => {
   useEffect(() => {
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyCC4uvj9fFdWhDTi9qo-0zMQuj_odeEUFE&callback=initMap`;
-    script.async = true;
-    script.defer = true;
-    document.head.appendChild(script);
+    const loader = new Loader({
+      apiKey: 'AIzaSyCC4uvj9fFdWhDTi9qo-0zMQuj_odeEUFE',
+      version: 'weekly',
+    });
 
-    (window as any).initMap = function () {
+    loader.load().then(() => {
       const map = new google.maps.Map(document.getElementById('map') as HTMLElement, {
         zoom: 5,
         center: { lat: -4.022574206598659, lng: 122.58989586223134 }
@@ -118,7 +117,7 @@ const Event: React.FC = () => {
           infowindow.open(map, marker);
         });
       });
-    };
+    });
 
     return () => {
       delete (window as any).initMap;

@@ -9,7 +9,7 @@ function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [remember, setRemember] = useState(false);
-    const [errors, setErrors] = useState({}); 
+    // const [errors, setErrors] = useState({}); 
     const navigate = useNavigate();
 
     const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,7 +34,7 @@ function Login() {
         } catch (error) {
             console.error('Login error:', error);
             toast.error((error as Error).message);
-            setErrors({ auth: (error as Error).message }); // Set error messages to display
+            //setErrors({ auth: (error as Error).message }); // Set error messages to display
         }
     };
 
