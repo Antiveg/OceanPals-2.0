@@ -14,6 +14,7 @@ import Profile from "./pages/Profile";
 import Event from "./pages/Event";
 import EventDetail from "./pages/EventDetail";
 import Ranking from "./pages/Rank";
+import NotFound from "./pages/NotFound";
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
+          <Route path="*" element={<NotFound />} />
           <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
