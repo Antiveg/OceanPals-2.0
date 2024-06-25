@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { auth, db } from '../FirebaseConfig'; // Ensure this points to your Firebase configuration
+import { db } from '../FirebaseConfig'; // Ensure this points to your Firebase configuration
 import { useAuth } from '../provider/AuthProvider'; // Adjust the path according to your project structure
 import { getDoc, doc } from 'firebase/firestore';
 
