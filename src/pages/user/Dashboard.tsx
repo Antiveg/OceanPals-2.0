@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { db } from '../FirebaseConfig'; // Ensure this points to your Firebase configuration
-import { useAuth } from '../provider/AuthProvider'; // Adjust the path according to your project structure
+import { db } from '../../FirebaseConfig'; // Ensure this points to your Firebase configuration
+import { useAuth } from '../../provider/AuthProvider'; // Adjust the path according to your project structure
 import { getDoc, doc } from 'firebase/firestore';
 
 interface Event {
@@ -9,6 +9,8 @@ interface Event {
   description: string;
   image: string;
   points: number;
+  place: string;
+  date: string;
 }
 
 const Dashboard: React.FC = () => {
@@ -16,6 +18,7 @@ const Dashboard: React.FC = () => {
   const [points, setPoints] = useState<number | null>(null);
   const [ranking, setRanking] = useState<string | null>(null);
   const [currentEvent, setCurrentEvent] = useState<Event | null>(null);
+  const [activeEventId, setActiveEventId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -36,18 +39,24 @@ const Dashboard: React.FC = () => {
               setRanking('N/A');
             }
 
-            // Fetch current event (this is a placeholder logic)
-            const eventDoc = await getDoc(doc(db, 'Events', user.uid));
-            if (eventDoc.exists()) {
-              const eventData = eventDoc.data();
-              setCurrentEvent({
-                title: eventData.title,
-                description: eventData.description,
-                image: eventData.image,
-                points: eventData.points,
-              });
-            } else {
-              setCurrentEvent(null);
+            // Fetch current event
+            const activeEventId = userData?.activeEventId;
+            setActiveEventId(activeEventId);
+            if (activeEventId) {
+              const eventDoc = await getDoc(doc(db, 'Events', activeEventId));
+              if (eventDoc.exists()) {
+                const eventData = eventDoc.data();
+                setCurrentEvent({
+                  title: eventData.title,
+                  description: eventData.description,
+                  image: eventData.image,
+                  points: eventData.points,
+                  place: eventData.place,
+                  date: eventData.date,
+                });
+              } else {
+                setCurrentEvent(null);
+              }
             }
           }
         } catch (error) {
@@ -76,6 +85,8 @@ const Dashboard: React.FC = () => {
               <div className="px-4 py-2">
                 <h1 className="text-xl font-bold text-gray-800 dark:text-white">{currentEvent.title}</h1>
                 <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">{currentEvent.description}</p>
+                <p className="mt-1 text-sm text-gray-600 dark:text-gray-400"><strong>Location:</strong> {currentEvent.place}</p>
+                <p className="mt-1 text-sm text-gray-600 dark:text-gray-400"><strong>Date:</strong> {new Date(currentEvent.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}</p>
               </div>
               <img className="object-cover w-full h-48 mt-2" src={currentEvent.image} alt={currentEvent.title} />
               <div className="flex items-center justify-between px-4 py-2 bg-blue-700">
@@ -86,7 +97,7 @@ const Dashboard: React.FC = () => {
             <p className="text-lg font-normal text-gray-500 dark:text-gray-400 mb-6">Currently you don't have any active events right now</p>
           )}
           <Link
-            to={currentEvent ? "/events/dashboard" : "/events"}
+            to={currentEvent ? `/events/dashboard/${activeEventId}` : "/events"}
             className="inline-flex justify-center items-center py-2.5 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-900"
           >
             Go to Event

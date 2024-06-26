@@ -13,6 +13,7 @@
     "@googlemaps/js-api-loader": "^1.16.6",
     "@react-google-maps/api": "^2.19.3",
     "@types/google.maps": "^3.55.10",
+    "axios": "^1.7.2",
     "chart.js": "^4.4.3",
     "firebase": "^10.12.2",
     "flowbite": "^2.3.0",

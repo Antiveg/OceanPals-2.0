@@ -4,21 +4,22 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import { AuthProvider } from "./provider/AuthProvider";
 import Layout from "./layout/Layout";
-import Dashboard from "./pages/Dashboard";
+import Dashboard from "./pages/user/Dashboard";
 import Recruitment from "./pages/Recruitment";
 import RecruitmentDetail from "./pages/RecruitmentDetail";
 import Training from "./pages/Training";
 import TrainingDetail from "./pages/TrainingDetail";
 import Store from "./pages/Store";
 import Profile from "./pages/Profile";
-import Event from "./pages/Event";
-import EventDetail from "./pages/EventDetail";
+import Event from "./pages/user/Event";
+import EventDetail from "./pages/user/EventDetail";
 import Ranking from "./pages/Rank";
 import NotFound from "./pages/NotFound";
 import AdminLayout from "./layout/AdminLayout";
 import CRUDPanel from "./pages/admin/CRUDPanel";
 import AdminProfile from "./pages/admin/AdminProfile";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import EventDashboard from "./pages/user/EventDashboard";
 
 function App() {
 
@@ -33,7 +34,8 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route path="/home" element={<Dashboard />} />
             <Route path="/events" element={<Event />} />
-            <Route path="/events/detail" element={<EventDetail />} />
+            <Route path="/events/:eventId" element={<EventDetail />} />
+            <Route path="/events/dashboard/:eventId" element={<EventDashboard />} />
             <Route path="/recruitment" element={<Recruitment />} />
             <Route path="/recruitment/detail" element={<RecruitmentDetail />} />
             <Route path="/training" element={<Training />} />

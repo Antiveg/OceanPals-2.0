@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { db } from '../../FirebaseConfig'; // Ensure this points to your Firebase configuration
 import { collection, getDocs, query, where, Timestamp } from 'firebase/firestore';
 import { Pie, Line } from 'react-chartjs-2';
 import 'chart.js/auto';
+import { AuthContext } from '../../provider/AuthProvider'; // Adjust the path according to your project structure
 
 const AdminDashboard: React.FC = () => {
+    const { user, loading } = useContext(AuthContext) || { user: null, loading: true };
     const [counts, setCounts] = useState({ users: 0, events: 0, volunteers: 0, stores: 0 });
     const [loginData, setLoginData] = useState<number[]>([]);
 
@@ -69,9 +71,15 @@ const AdminDashboard: React.FC = () => {
         ]
     };
 
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <div className="container mx-auto p-4">
-            <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-4">Admin Dashboard</h2>
+            <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-4">
+                Hello, {user?.username || "Admin"}! <span role="img" aria-label="waving">👋</span> What Would You Like to Do Today?
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
                     <h3 className="text-lg font-medium text-gray-800 dark:text-gray-100 mb-2">Counts</h3>

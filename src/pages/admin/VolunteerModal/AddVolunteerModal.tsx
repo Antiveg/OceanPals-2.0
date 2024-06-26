@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
-import { db } from '../../../FirebaseConfig'; // Ensure this points to your Firebase configuration
+import { db, storage } from '../../../FirebaseConfig'; // Ensure this points to your Firebase configuration
 import { addDoc, collection } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 const AddVolunteerModal: React.FC<{ isOpen: boolean; onClose: () => void; fetchData: () => void; }> = ({ isOpen, onClose, fetchData }) => {
     const [formData, setFormData] = useState({
         name: '',
-        description: '',
+        shortDescription: '',
+        fullDescription: '',
         currentVolunteeredUser: '',
     });
+    const [imageFile, setImageFile] = useState<File | null>(null);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -17,10 +20,26 @@ const AddVolunteerModal: React.FC<{ isOpen: boolean; onClose: () => void; fetchD
         });
     };
 
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            setImageFile(e.target.files[0]);
+        }
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await addDoc(collection(db, 'Volunteer'), formData);
+            let imageUrl = '';
+            if (imageFile) {
+                const imageRef = ref(storage, `volunteers/${imageFile.name}`);
+                await uploadBytes(imageRef, imageFile);
+                imageUrl = await getDownloadURL(imageRef);
+            }
+
+            await addDoc(collection(db, 'Volunteers'), {
+                ...formData,
+                image: imageUrl,
+            });
             fetchData();
             onClose();
         } catch (error) {
@@ -33,7 +52,7 @@ const AddVolunteerModal: React.FC<{ isOpen: boolean; onClose: () => void; fetchD
     }
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center z-50 overflow-y-auto">
+        <div className="fixed inset-0 flex items-center justify-center z-50 overflow-y-auto text-left">
             <div className="fixed inset-0 bg-black opacity-50" onClick={onClose}></div>
             <div className="relative bg-gray-800 rounded-lg shadow-lg p-6 max-w-lg w-full mx-auto overflow-y-auto">
                 <div className="flex items-center justify-between mb-4">
@@ -64,17 +83,52 @@ const AddVolunteerModal: React.FC<{ isOpen: boolean; onClose: () => void; fetchD
                             />
                         </div>
                         <div>
-                            <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-100">Description</label>
-                            <textarea 
-                                name="description" 
-                                id="description" 
+                            <label htmlFor="shortDescription" className="block mb-2 text-sm font-medium text-gray-100">Short Description</label>
+                            <input 
+                                type="text" 
+                                name="shortDescription" 
+                                id="shortDescription" 
                                 className="bg-gray-700 border border-gray-600 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
-                                placeholder="Type volunteer description" 
+                                placeholder="Type short description" 
                                 required 
-                                value={formData.description} 
+                                value={formData.shortDescription} 
                                 onChange={handleChange} 
                             />
                         </div>
+                        <div>
+                            <label htmlFor="fullDescription" className="block mb-2 text-sm font-medium text-gray-100">Full Description</label>
+                            <textarea 
+                                name="fullDescription" 
+                                id="fullDescription" 
+                                className="bg-gray-700 border border-gray-600 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
+                                placeholder="Type full description" 
+                                required 
+                                value={formData.fullDescription} 
+                                onChange={handleChange} 
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="image" className="block mb-2 text-sm font-medium text-gray-100">Image</label>
+                            <input 
+                                type="file" 
+                                name="image" 
+                                id="image" 
+                                className="bg-gray-700 border border-gray-600 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
+                                onChange={handleImageChange} 
+                            />
+                        </div>
+                        {/* <div>
+                            <label htmlFor="currentVolunteeredUser" className="block mb-2 text-sm font-medium text-gray-100">Current Volunteered User</label>
+                            <input 
+                                type="text" 
+                                name="currentVolunteeredUser" 
+                                id="currentVolunteeredUser" 
+                                className="bg-gray-700 border border-gray-600 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
+                                placeholder="Type current volunteered user" 
+                                value={formData.currentVolunteeredUser} 
+                                onChange={handleChange} 
+                            />
+                        </div> */}
                     </div>
                     <button 
                         type="submit" 

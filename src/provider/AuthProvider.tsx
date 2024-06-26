@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const userDoc = await getDoc(doc(db, 'Users', firebaseUser.uid));
         if (userDoc.exists()) {
           const userData = userDoc.data();
-          setUser({ ...firebaseUser, username: userData.username, role: userData.role });
+          setUser({ ...firebaseUser, username: userData?.username, role: userData?.role });
         } else {
           setUser(firebaseUser);
         }
@@ -52,3 +52,5 @@ export const useAuth = () => {
   }
   return context;
 };
+
+export { AuthContext };

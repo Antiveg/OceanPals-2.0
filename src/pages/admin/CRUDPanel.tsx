@@ -9,13 +9,16 @@ import AddVolunteerModal from './VolunteerModal/AddVolunteerModal';
 import EditVolunteerModal from './VolunteerModal/EditVolunteerModal';
 import AddStoreModal from './StoreModal/AddStoreModal';
 import EditStoreModal from './StoreModal/EditStoreModal';
+import ConfirmationModal from './ConfirmationModal'; // Import ConfirmationModal
 
 const CRUDPanel: React.FC = () => {
     const [data, setData] = useState<any[]>([]);
     const [type, setType] = useState('Users');
     const [addModalIsOpen, setAddModalIsOpen] = useState(false);
     const [editModalIsOpen, setEditModalIsOpen] = useState(false);
+    const [confirmationModalIsOpen, setConfirmationModalIsOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState<any>(null);
+    const [itemToDelete, setItemToDelete] = useState<any>(null);
 
     const fetchData = async () => {
         const querySnapshot = await getDocs(collection(db, type));
@@ -31,9 +34,12 @@ const CRUDPanel: React.FC = () => {
         fetchData();
     }, [type]);
 
-    const handleDelete = async (id: string) => {
-        await deleteDoc(doc(db, type, id));
-        fetchData();
+    const handleDelete = async () => {
+        if (itemToDelete) {
+            await deleteDoc(doc(db, type, itemToDelete.id));
+            fetchData();
+            setConfirmationModalIsOpen(false);
+        }
     };
 
     const openAddModal = () => {
@@ -53,6 +59,15 @@ const CRUDPanel: React.FC = () => {
         setEditModalIsOpen(false);
     };
 
+    const openConfirmationModal = (item: any) => {
+        setItemToDelete(item);
+        setConfirmationModalIsOpen(true);
+    };
+
+    const closeConfirmationModal = () => {
+        setConfirmationModalIsOpen(false);
+    };
+
     const renderTableHeaders = () => {
         if (type === 'Users') {
             return (
@@ -61,6 +76,7 @@ const CRUDPanel: React.FC = () => {
                     <th>Username</th>
                     <th>Email</th>
                     <th>Role</th>
+                    <th>Profile Picture</th>
                     <th>Action</th>
                 </>
             );
@@ -69,23 +85,29 @@ const CRUDPanel: React.FC = () => {
                 <>
                     <th>No.</th>
                     <th>Name</th>
-                    <th>Description</th>
+                    <th>Short Description</th>
+                    <th>Full Description</th>
+                    <th>Point</th>
                     <th>Image</th>
                     <th>Location</th>
                     <th>Latitude</th>
                     <th>Longitude</th>
                     <th>Date</th>
                     <th>Time</th>
-                    <th>Current Participating User</th>
+                    <th>Status</th>
+                    <th>Special</th>
+                    <th>Participants</th>
                     <th>Action</th>
                 </>
             );
-        } else if (type === 'Volunteer') {
+        } else if (type === 'Volunteers') {
             return (
                 <>
                     <th>No.</th>
                     <th>Name</th>
-                    <th>Description</th>
+                    <th>Short Description</th>
+                    <th>Full Description</th>
+                    <th>Image</th>
                     <th>Current Volunteered User</th>
                     <th>Action</th>
                 </>
@@ -106,27 +128,60 @@ const CRUDPanel: React.FC = () => {
     };
 
     const renderTableRows = () => {
+        if (data.length === 0) {
+            return (
+                <tr>
+                    <td colSpan={type === 'Users' ? 6 : 13} className="text-center py-4">
+                        No Items to Display
+                    </td>
+                </tr>
+            );
+        }
+
         return data.map((item) => (
             <tr key={item.id}>
                 <td>{item.index}</td>
                 <td>{item.username || item.name}</td>
-                <td>{item.email || item.description}</td>
-                <td>{item.role || item.image}</td>
+                {type === 'Users' && (
+                    <>
+                        <td>{item.email}</td>
+                        <td>{item.role}</td>
+                        <td>
+                            <img src={item.profilePicture} alt={item.username} style={{ width: '50px', height: '50px', borderRadius: '50%' }} />
+                        </td>
+                    </>
+                )}
                 {type === 'Events' && (
                     <>
-                        <td>{item.location}</td>
+                        <td>{item.shortDescription}</td>
+                        <td>{item.fullDescription}</td>
+                        <td>{item.point}</td>
+                        <td>
+                            <img src={item.image} alt={item.name} style={{ width: '100px', height: '100px' }} />
+                        </td>
+                        <td>{item.place}</td>
                         <td>{item.latitude}</td>
                         <td>{item.longitude}</td>
                         <td>{item.date}</td>
                         <td>{item.time}</td>
-                        <td>{item.currentParticipatingUser}</td>
+                        <td>{new Date(item.date + ' ' + item.time) < new Date() ? 'Finished' : 'Unfinished'}</td>
+                        <td>{item.special ? 'Yes' : 'No'}</td>
+                        <td></td>
                     </>
                 )}
-                {type === 'Volunteer' && (
-                    <td>{item.currentVolunteeredUser}</td>
+                {type === 'Volunteers' && (
+                    <>
+                        <td>{item.shortDescription}</td>
+                        <td>{item.fullDescription}</td>
+                        <td>
+                            <img src={item.image} alt={item.name} style={{ width: '100px', height: '100px' }} />
+                        </td>
+                        <td>{item.currentVolunteeredUser}</td>
+                    </>
                 )}
                 {type === 'Stores' && (
                     <>
+                        <td>{item.description}</td>
                         <td>
                             <img src={item.image} alt={item.name} style={{ width: '100px', height: '100px' }} />
                         </td>
@@ -136,7 +191,7 @@ const CRUDPanel: React.FC = () => {
                 )}
                 <td>
                     <button onClick={() => openEditModal(item)}>Edit</button>
-                    <button onClick={() => handleDelete(item.id)}>Delete</button>
+                    <button onClick={() => openConfirmationModal(item)}>Delete</button>
                 </td>
             </tr>
         ));
@@ -176,7 +231,7 @@ const CRUDPanel: React.FC = () => {
                     <button onClick={() => setType('Events')} className={`px-5 py-2 text-xs font-medium ${type === 'Events' ? 'bg-gray-100 dark:bg-gray-800' : 'text-gray-600'} transition-colors duration-200 sm:text-sm dark:text-gray-300`}>
                         Events
                     </button>
-                    <button onClick={() => setType('Volunteer')} className={`px-5 py-2 text-xs font-medium ${type === 'Volunteer' ? 'bg-gray-100 dark:bg-gray-800' : 'text-gray-600'} transition-colors duration-200 sm:text-sm dark:text-gray-300`}>
+                    <button onClick={() => setType('Volunteers')} className={`px-5 py-2 text-xs font-medium ${type === 'Volunteers' ? 'bg-gray-100 dark:bg-gray-800' : 'text-gray-600'} transition-colors duration-200 sm:text-sm dark:text-gray-300`}>
                         Volunteers
                     </button>
                     <button onClick={() => setType('Stores')} className={`px-5 py-2 text-xs font-medium ${type === 'Stores' ? 'bg-gray-100 dark:bg-gray-800' : 'text-gray-600'} transition-colors duration-200 sm:text-sm dark:text-gray-300`}>
@@ -212,12 +267,18 @@ const CRUDPanel: React.FC = () => {
             </div>
             <AddUserModal isOpen={addModalIsOpen && type === 'Users'} onClose={closeAddModal} fetchData={fetchData} />
             <AddEventModal isOpen={addModalIsOpen && type === 'Events'} onClose={closeAddModal} fetchData={fetchData} />
-            <AddVolunteerModal isOpen={addModalIsOpen && type === 'Volunteer'} onClose={closeAddModal} fetchData={fetchData} />
+            <AddVolunteerModal isOpen={addModalIsOpen && type === 'Volunteers'} onClose={closeAddModal} fetchData={fetchData} />
             <AddStoreModal isOpen={addModalIsOpen && type === 'Stores'} onClose={closeAddModal} fetchData={fetchData} />
             <EditUserModal isOpen={editModalIsOpen && type === 'Users'} onClose={closeEditModal} fetchData={fetchData} userData={selectedItem} />
             <EditEventModal isOpen={editModalIsOpen && type === 'Events'} onClose={closeEditModal} fetchData={fetchData} eventData={selectedItem} />
-            <EditVolunteerModal isOpen={editModalIsOpen && type === 'Volunteer'} onClose={closeEditModal} fetchData={fetchData} volunteerData={selectedItem} />
+            <EditVolunteerModal isOpen={editModalIsOpen && type === 'Volunteers'} onClose={closeEditModal} fetchData={fetchData} volunteerData={selectedItem} />
             <EditStoreModal isOpen={editModalIsOpen && type === 'Stores'} onClose={closeEditModal} fetchData={fetchData} storeData={selectedItem} />
+            <ConfirmationModal 
+                isOpen={confirmationModalIsOpen} 
+                onClose={closeConfirmationModal} 
+                onConfirm={handleDelete} 
+                message={`Are you sure you want to delete this ${type.slice(0, -1)}?`} 
+            />
         </section>
     );
 };

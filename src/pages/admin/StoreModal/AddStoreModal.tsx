@@ -53,7 +53,7 @@ const AddStoreModal: React.FC<{ isOpen: boolean; onClose: () => void; fetchData:
     }
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
+        <div className="fixed inset-0 flex items-center justify-center z-50 text-left">
             <div className="fixed inset-0 bg-black opacity-50" onClick={onClose}></div>
             <div className="relative bg-gray-800 rounded-lg shadow-lg p-6 max-w-lg w-full mx-auto">
                 <div className="flex items-center justify-between mb-4">

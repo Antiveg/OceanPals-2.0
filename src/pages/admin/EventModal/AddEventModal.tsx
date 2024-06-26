@@ -1,44 +1,59 @@
-import React, { useState } from 'react';
-import { db, storage } from '../../../FirebaseConfig'; // Ensure this points to your Firebase configuration
+import React, { useState, useEffect } from 'react';
 import { addDoc, collection } from 'firebase/firestore';
+import { db, storage } from '../../../FirebaseConfig'; // Ensure this points to your Firebase configuration
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import {
-    GoogleMap,
-    LoadScript,
-    Marker
-} from '@react-google-maps/api';
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 
 const AddEventModal: React.FC<{ isOpen: boolean; onClose: () => void; fetchData: () => void; }> = ({ isOpen, onClose, fetchData }) => {
     const [formData, setFormData] = useState({
         name: '',
-        description: '',
+        shortDescription: '',
+        fullDescription: '',
         image: '',
         location: '',
         latitude: 0,
         longitude: 0,
         date: '',
         time: '',
+        special: false,
+        place: '',
+        point: 0,
     });
     const [imageFile, setImageFile] = useState<File | null>(null);
-    const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
+
+    useEffect(() => {
+        // Reset form data when modal is opened
+        if (isOpen) {
+            setFormData({
+                name: '',
+                shortDescription: '',
+                fullDescription: '',
+                image: '',
+                location: '',
+                latitude: 0,
+                longitude: 0,
+                date: '',
+                time: '',
+                special: false,
+                place: '',
+                point: 0,
+            });
+            setImageFile(null);
+        }
+    }, [isOpen]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
+        const { name, value, type } = e.target;
+        const checked = type === 'checkbox' ? (e.target as HTMLInputElement).checked : undefined;
         setFormData({
             ...formData,
-            [name]: value,
+            [name]: checked !== undefined ? checked : value,
         });
     };
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
-            const file = e.target.files[0];
-            setImageFile(file);
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImagePreviewUrl(reader.result as string);
-            };
-            reader.readAsDataURL(file);
+            setImageFile(e.target.files[0]);
         }
     };
 
@@ -79,12 +94,12 @@ const AddEventModal: React.FC<{ isOpen: boolean; onClose: () => void; fetchData:
 
     const containerStyle = {
         width: '100%',
-        height: '400px'
+        height: '400px',
     };
 
     const center = {
         lat: formData.latitude,
-        lng: formData.longitude
+        lng: formData.longitude,
     };
 
     if (!isOpen) {
@@ -92,9 +107,9 @@ const AddEventModal: React.FC<{ isOpen: boolean; onClose: () => void; fetchData:
     }
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center z-50 overflow-auto">
+        <div className="fixed inset-0 flex items-center justify-center z-50 text-left">
             <div className="fixed inset-0 bg-black opacity-50" onClick={onClose}></div>
-            <div className="relative bg-gray-800 rounded-lg shadow-lg p-6 max-w-lg w-full mx-auto">
+            <div className="relative bg-gray-800 rounded-lg shadow-lg p-6 max-w-lg w-full mx-auto max-h-[90%] overflow-y-auto">
                 <div className="flex items-center justify-between mb-4">
                     <h3 className="text-lg font-semibold text-gray-100">Add New Event</h3>
                     <button 
@@ -123,14 +138,40 @@ const AddEventModal: React.FC<{ isOpen: boolean; onClose: () => void; fetchData:
                             />
                         </div>
                         <div>
-                            <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-100">Description</label>
-                            <textarea 
-                                name="description" 
-                                id="description" 
+                            <label htmlFor="shortDescription" className="block mb-2 text-sm font-medium text-gray-100">Short Description</label>
+                            <input 
+                                type="text" 
+                                name="shortDescription" 
+                                id="shortDescription" 
                                 className="bg-gray-700 border border-gray-600 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
-                                placeholder="Type event description" 
+                                placeholder="Type short description" 
                                 required 
-                                value={formData.description} 
+                                value={formData.shortDescription} 
+                                onChange={handleChange} 
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="fullDescription" className="block mb-2 text-sm font-medium text-gray-100">Full Description</label>
+                            <textarea 
+                                name="fullDescription" 
+                                id="fullDescription" 
+                                className="bg-gray-700 border border-gray-600 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
+                                placeholder="Type full description" 
+                                required 
+                                value={formData.fullDescription} 
+                                onChange={handleChange} 
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="point" className="block mb-2 text-sm font-medium text-gray-100">Point</label>
+                            <input
+                                type='number' 
+                                name="point" 
+                                id="point" 
+                                className="bg-gray-700 border border-gray-600 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
+                                placeholder="Type point" 
+                                required 
+                                value={formData.point} 
                                 onChange={handleChange} 
                             />
                         </div>
@@ -143,9 +184,19 @@ const AddEventModal: React.FC<{ isOpen: boolean; onClose: () => void; fetchData:
                                 className="bg-gray-700 border border-gray-600 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
                                 onChange={handleImageChange} 
                             />
-                            {imagePreviewUrl && (
-                                <img src={imagePreviewUrl} alt="Image Preview" className="mt-2 rounded-lg max-h-48" />
-                            )}
+                        </div>
+                        <div>
+                            <label htmlFor="place" className="block mb-2 text-sm font-medium text-gray-100">Place</label>
+                            <input 
+                                type="text" 
+                                name="place" 
+                                id="place" 
+                                className="bg-gray-700 border border-gray-600 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
+                                placeholder="Type event place" 
+                                required 
+                                value={formData.place} 
+                                onChange={handleChange} 
+                            />
                         </div>
                         <div>
                             <label htmlFor="date" className="block mb-2 text-sm font-medium text-gray-100">Date</label>
@@ -170,6 +221,19 @@ const AddEventModal: React.FC<{ isOpen: boolean; onClose: () => void; fetchData:
                                 value={formData.time} 
                                 onChange={handleChange} 
                             />
+                        </div>
+                        <div className="flex items-center mb-4">
+                            <input
+                                id="special"
+                                name="special"
+                                type="checkbox"
+                                checked={formData.special}
+                                onChange={handleChange}
+                                className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500 dark:focus:ring-blue-600 focus:ring-2"
+                            />
+                            <label htmlFor="special" className="ml-2 text-sm font-medium text-gray-100">
+                                Special
+                            </label>
                         </div>
                         <div className="col-span-2">
                             <label className="block mb-2 text-sm font-medium text-gray-100">Location</label>
