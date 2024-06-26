@@ -2,24 +2,26 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getDoc, doc, collection, query, where, onSnapshot } from 'firebase/firestore';
 import { db } from '../../FirebaseConfig';
-import { useAuth } from '../../provider/AuthProvider'; // Adjust the path according to your project structure
+import { useAuth } from '../../provider/AuthProvider';
 import EventGuide from './EventGuide';
 import Task from './Task';
+import Performance from './Performance';
 
 interface Event {
     title: string;
     description: string;
     image: string;
-    points: number;
+    point: number;
     place: string;
     date: string;
-    tasks: Array<{ id: string; name: string }>;
+    tasks: Array<{ id: string; name: string; points: number }>;
 }
 
 interface UserTaskProgress {
     taskId: string;
     name: string;
     status: string;
+    eventId: string;
 }
 
 const EventDashboard: React.FC = () => {
@@ -49,11 +51,13 @@ const EventDashboard: React.FC = () => {
                     const tasksData: UserTaskProgress[] = [];
                     snapshot.forEach((doc) => {
                         const data = doc.data();
+                        console.log("UserTaskProgress Document Data:", data);
                         data.tasks.forEach((task: any) => {
                             tasksData.push({
                                 taskId: task.taskId,
                                 name: task.name,
-                                status: task.status
+                                status: task.status,
+                                eventId: data.eventId
                             });
                         });
                     });
@@ -92,7 +96,7 @@ const EventDashboard: React.FC = () => {
                             {event.place}
                         </p>
                         <ul className="ps-5 mt-2 space-y-1 list-disc list-inside">
-                            <li>Points: {event.points}</li>
+                            <li>Points: {event.point}</li>
                             <li>Date: {new Date(event.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}</li>
                             <li>Time: {new Date(event.date).toLocaleTimeString()}</li>
                         </ul>
@@ -100,7 +104,8 @@ const EventDashboard: React.FC = () => {
                     <EventGuide />
                 </div>
 
-                <Task tasks={event.tasks || []} userTasks={userTasks || []} />
+                <Task tasks={event.tasks || []} userTasks={userTasks || []} eventPoints={event.point} />
+                {eventId && <Performance eventId={eventId} />}
             </div>
         </section>
     );

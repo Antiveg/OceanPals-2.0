@@ -77,6 +77,7 @@ const CRUDPanel: React.FC = () => {
                     <th>Email</th>
                     <th>Role</th>
                     <th>Profile Picture</th>
+                    <th>Points</th>
                     <th>Action</th>
                 </>
             );
@@ -149,6 +150,7 @@ const CRUDPanel: React.FC = () => {
                         <td>
                             <img src={item.profilePicture} alt={item.username} style={{ width: '50px', height: '50px', borderRadius: '50%' }} />
                         </td>
+                        <td>{item.point}</td>
                     </>
                 )}
                 {type === 'Events' && (

@@ -15,7 +15,7 @@ interface Event {
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
-  const [points, setPoints] = useState<number | null>(null);
+  const [point, setPoint] = useState<number | null>(null);
   const [ranking, setRanking] = useState<string | null>(null);
   const [currentEvent, setCurrentEvent] = useState<Event | null>(null);
   const [activeEventId, setActiveEventId] = useState<string | null>(null);
@@ -27,7 +27,7 @@ const Dashboard: React.FC = () => {
           const userDoc = await getDoc(doc(db, 'Users', user.uid));
           if (userDoc.exists()) {
             const userData = userDoc.data();
-            setPoints(userData?.points ?? 0);
+            setPoint(userData?.point ?? 0);
 
             // Fetching ranking (this is a placeholder logic)
             const rankingsDoc = await getDoc(doc(db, 'Rankings', user.uid));
@@ -118,7 +118,7 @@ const Dashboard: React.FC = () => {
             </a>
             <h2 className="text-gray-900 dark:text-white text-3xl font-extrabold mb-2">My Points</h2>
             <p className="text-lg font-normal text-gray-500 dark:text-gray-400 mb-4">See your cumulative points count</p>
-            <p className="text-7xl font-normal text-gray-500 dark:text-gray-400 mb-4">{points !== null ? points : 'Loading...'}</p>
+            <p className="text-7xl font-normal text-gray-500 dark:text-gray-400 mb-4">{point !== null ? point : 'Loading...'}</p>
             <Link to="/store" className="text-blue-600 dark:text-blue-500 hover:underline font-medium text-lg inline-flex items-center">Redeem your points
               <svg className="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
