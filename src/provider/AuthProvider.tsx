@@ -5,6 +5,7 @@ import { doc, getDoc } from 'firebase/firestore';
 
 interface User extends FirebaseUser {
   username?: string;
+  role?: string;
 }
 
 interface AuthContextType {
@@ -24,7 +25,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const userDoc = await getDoc(doc(db, 'Users', firebaseUser.uid));
         if (userDoc.exists()) {
           const userData = userDoc.data();
-          setUser({ ...firebaseUser, username: userData.username });
+          setUser({ ...firebaseUser, username: userData.username, role: userData.role });
         } else {
           setUser(firebaseUser);
         }

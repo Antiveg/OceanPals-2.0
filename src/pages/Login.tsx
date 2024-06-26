@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../FirebaseConfig'; // Ensure this points to your Firebase configuration
+import { auth, db } from '../FirebaseConfig'; // Ensure this points to your Firebase configuration
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { doc, getDoc } from 'firebase/firestore';
 
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [remember, setRemember] = useState(false);
-    // const [errors, setErrors] = useState({}); 
     const navigate = useNavigate();
 
     const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,13 +28,22 @@ function Login() {
         e.preventDefault();
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            console.log('Logged in user:', userCredential.user);
+            const user = userCredential.user;
+
+            // Fetch user role from Firestore
+            const userDoc = await getDoc(doc(db, 'Users', user.uid));
+            const userData = userDoc.data();
+            
+            if (userData?.role === 'admin') {
+                navigate('/admin/dashboard');
+            } else {
+                navigate('/home');
+            }
+            
             toast.success('Logged in successfully');
-            navigate('/home'); // Redirect to a dashboard or appropriate route
         } catch (error) {
             console.error('Login error:', error);
             toast.error((error as Error).message);
-            //setErrors({ auth: (error as Error).message }); // Set error messages to display
         }
     };
 

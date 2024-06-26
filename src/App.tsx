@@ -15,6 +15,10 @@ import Event from "./pages/Event";
 import EventDetail from "./pages/EventDetail";
 import Ranking from "./pages/Rank";
 import NotFound from "./pages/NotFound";
+import AdminLayout from "./layout/AdminLayout";
+import CRUDPanel from "./pages/admin/CRUDPanel";
+import AdminProfile from "./pages/admin/AdminProfile";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 
 function App() {
 
@@ -37,6 +41,11 @@ function App() {
             <Route path="/store" element={<Store />}/>
             <Route path="/profile" element={<Profile />}/>
             <Route path="/ranking" element={<Ranking />}/>
+          </Route>
+          <Route path="/" element={<AdminLayout />}>
+            <Route path="/admin/dashboard" element={<AdminDashboard />}/>
+            <Route path="/admin/crud-panel" element={<CRUDPanel />}/>
+            <Route path="/admin/profile" element={<AdminProfile />}/>
           </Route>
         </Routes>
       </BrowserRouter>
