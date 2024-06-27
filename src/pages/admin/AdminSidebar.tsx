@@ -44,18 +44,14 @@ const AdminSidebar: React.FC = () => {
     };
 
     return (
-        <aside className={`flex flex-col ${isExpanded ? 'w-64' : 'w-20'} h-screen px-4 py-8 overflow-y-auto bg-white border-r rtl:border-r-0 rtl:border-l dark:bg-gray-900 dark:border-gray-700 transition-width duration-300`}>
+        <section className={`flex flex-col ${isExpanded ? 'w-64' : 'w-20'} h-screen px-4 py-8 overflow-y-auto bg-white border-r rtl:border-r-0 rtl:border-l dark:bg-gray-900 dark:border-gray-700 transition-width duration-300`}>
             <button onClick={toggleSidebar} className="flex items-center justify-center mb-4 text-gray-500 focus:outline-none">
                 <svg className={`w-6 h-6 transform ${isExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 12H5m7-7l-7 7 7 7" />
                 </svg>
             </button>
 
-            <a href="#" className="mx-auto">
-                <img className="w-auto h-6 sm:h-7" src="https://merakiui.com/images/full-logo.svg" alt="Logo" />
-            </a>
-
-            <div className="flex flex-col items-center mt-6 -mx-2">
+            <div className="flex flex-col items-center mt-2 -mx-2">
                 {user && (
                     <>
                         <img
@@ -90,12 +86,12 @@ const AdminSidebar: React.FC = () => {
                         {isExpanded && <span className="mx-4 font-medium">CRUD Panel</span>}
                     </button>
 
-                    <button onClick={() => handleNavigation('/admin/profile')} className="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 w-full text-left">
+                    <button onClick={() => handleNavigation('/admin/events')} className="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 w-full text-left">
                         <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M2 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 002 2H4a2 2 0 01-2-2V5zm3 1h6v4H5V6zm6 6H5v2h6v-2z" fill="currentColor" className="fill-current text-gray-600 group-hover:text-cyan-600" />
                             <path d="M15 7h1a2 2 0 012 2v5.5a1.5 1.5 0 01-3 0V7z" fill="currentColor" className="fill-current text-gray-300 group-hover:text-cyan-300" />
                         </svg>
-                        {isExpanded && <span className="mx-4 font-medium">Forum</span>}
+                        {isExpanded && <span className="mx-4 font-medium">Manage Event</span>}
                     </button>
 
                     <button onClick={() => handleNavigation('/admin/profile')} className="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 w-full text-left">
@@ -108,7 +104,7 @@ const AdminSidebar: React.FC = () => {
                 </nav>
             </div>
 
-            <div className="px-6 -mx-6 pt-4 flex justify-between items-center border-t">
+            <div className="px-6 -mx-6 pt-4 flex justify-between items-center border-t mt-10">
                 <button onClick={handleLogout} className="bg-red-500 px-4 py-3 flex items-center space-x-4 rounded-md text-gray-100 group w-full">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -116,7 +112,7 @@ const AdminSidebar: React.FC = () => {
                     {isExpanded && <span className="group-hover:text-gray-700">Logout</span>}
                 </button>
             </div>
-        </aside>
+        </section>
     );
 };
 

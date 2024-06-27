@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { db } from '../../FirebaseConfig'; // Ensure this points to your Firebase configuration
-import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDoc, getDocs } from 'firebase/firestore';
 import AddUserModal from './UserModal/AddUserModal';
 import EditUserModal from './UserModal/EditUserModal';
 import AddEventModal from './EventModal/AddEventModal';
@@ -168,7 +168,18 @@ const CRUDPanel: React.FC = () => {
                         <td>{item.time}</td>
                         <td>{new Date(item.date + ' ' + item.time) < new Date() ? 'Finished' : 'Unfinished'}</td>
                         <td>{item.special ? 'Yes' : 'No'}</td>
-                        <td></td>
+                        <td className="px-4 py-4 text-sm whitespace-nowrap">
+                            <div className="flex items-center">
+                                {item.participants && item.participants.slice(0, 4).map((participant: string, index: number) => (
+                                    <ParticipantTooltip key={index} participantId={participant} />
+                                ))}
+                                {item.participants && item.participants.length > 4 && (
+                                    <p className="flex items-center justify-center w-6 h-6 -mx-1 text-xs text-blue-600 bg-blue-100 border-2 border-white rounded-full">
+                                        +{item.participants.length - 4}
+                                    </p>
+                                )}
+                            </div>
+                        </td>
                     </>
                 )}
                 {type === 'Volunteers' && (
@@ -282,6 +293,39 @@ const CRUDPanel: React.FC = () => {
                 message={`Are you sure you want to delete this ${type.slice(0, -1)}?`} 
             />
         </section>
+    );
+};
+
+const ParticipantTooltip: React.FC<{ participantId: string }> = ({ participantId }) => {
+    const [participant, setParticipant] = useState<any>(null);
+
+    useEffect(() => {
+        const fetchParticipant = async () => {
+            const participantDoc = await getDoc(doc(db, 'Users', participantId));
+            if (participantDoc.exists()) {
+                setParticipant(participantDoc.data());
+            }
+        };
+
+        fetchParticipant();
+    }, [participantId]);
+
+    if (!participant) {
+        return null;
+    }
+
+    return (
+        <div className="relative inline-block">
+            <img
+                src={participant.profilePicture}
+                alt={participant.username}
+                className="object-cover w-6 h-6 -mx-1 border-2 border-white rounded-full dark:border-gray-700 cursor-pointer"
+                data-tooltip={participant.username}
+            />
+            <span className="absolute z-10 p-2 -mt-10 text-xs leading-none text-white whitespace-no-wrap bg-black shadow-lg rounded-lg" style={{ visibility: 'hidden' }}>
+                {participant.username}
+            </span>
+        </div>
     );
 };
 

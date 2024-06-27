@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { collection, query, onSnapshot, doc, getDoc, addDoc, serverTimestamp, Unsubscribe, where } from 'firebase/firestore';
+import { collection, query, onSnapshot, doc, getDoc, addDoc, serverTimestamp, orderBy, Unsubscribe, where } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../FirebaseConfig'; // Adjust according to your Firebase configuration
 import { useAuth } from '../provider/AuthProvider'; // Adjust according to your project structure
@@ -57,7 +57,7 @@ const Forum: React.FC = () => {
 
         // Fetch messages
         const fetchMessages = () => {
-            const messagesQuery = query(collection(db, 'Events', eventId, 'forumMessages'));
+            const messagesQuery = query(collection(db, 'Events', eventId, 'forumMessages'), orderBy('timestamp', 'asc'));
             return onSnapshot(messagesQuery, (snapshot) => {
                 const messagesData = snapshot.docs.map(doc => doc.data());
                 setMessages(messagesData as Message[]);
@@ -115,14 +115,18 @@ const Forum: React.FC = () => {
     };
 
     const handleBackToDashboard = () => {
-        navigate(`/events/dashboard/${eventId}`);
+        if (user?.role === 'admin') {
+            navigate('/admin/events');
+        } else {
+            navigate(`/events/dashboard/${eventId}`);
+        }
     };
 
     return (
         <div className="flex h-screen antialiased text-gray-800">
             <div className={`flex flex-row h-full w-full overflow-x-hidden ${sidebarOpen ? 'block' : 'hidden'} md:flex`}>
                 {/* Chat Sidebar */}
-                <div className="flex flex-col py-8 pl-6 pr-6 w-64 bg-white flex-shrink-0 rounded-xl">
+                <div className="flex flex-col py-8 pl-6 pr-6 w-64 bg-white flex-shrink-0 rounded-xl overflow-y-auto">
                     <div className="flex flex-row items-center justify-between h-12 w-full">
                         <div className="flex items-center justify-center rounded-2xl text-indigo-700 bg-indigo-100 h-10 w-10">
                             <svg

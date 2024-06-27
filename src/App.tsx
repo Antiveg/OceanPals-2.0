@@ -10,10 +10,10 @@ import RecruitmentDetail from "./pages/RecruitmentDetail";
 import Training from "./pages/Training";
 import TrainingDetail from "./pages/TrainingDetail";
 import Store from "./pages/Store";
-import Profile from "./pages/Profile";
+import Profile from "./pages/user/Profile";
 import Event from "./pages/user/Event";
 import EventDetail from "./pages/user/EventDetail";
-import Ranking from "./pages/Ranking";
+import Ranking from "./pages/user/Ranking";
 import NotFound from "./pages/NotFound";
 import AdminLayout from "./layout/AdminLayout";
 import CRUDPanel from "./pages/admin/CRUDPanel";
@@ -21,6 +21,8 @@ import AdminProfile from "./pages/admin/AdminProfile";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import EventDashboard from "./pages/user/EventDashboard";
 import Forum from "./pages/Forum";
+import EventManagement from "./pages/admin/EventManagement";
+import EventApproval from "./pages/admin/EventApproval";
 
 function App() {
 
@@ -50,7 +52,10 @@ function App() {
             <Route path="/admin/dashboard" element={<AdminDashboard />}/>
             <Route path="/admin/crud-panel" element={<CRUDPanel />}/>
             <Route path="/admin/profile" element={<AdminProfile />}/>
+            <Route path="/admin/events" element={<EventManagement />}/>
+            <Route path="/admin/events/:eventId" element={<EventApproval />}/>
           </Route>
+          <Route path="/admin/forum/:eventId" element={<Forum />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

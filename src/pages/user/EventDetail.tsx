@@ -153,7 +153,7 @@ const EventDetail: React.FC = () => {
                     />
                   </svg>
                   <span>
-                    <strong className="font-semibold text-gray-900">Points :</strong> {event.points || 0}
+                    <strong className="font-semibold text-gray-900">Points :</strong> {event.point || 0}
                   </span>
                 </li>
               </ul>

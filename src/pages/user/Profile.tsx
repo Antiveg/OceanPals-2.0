@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../provider/AuthProvider'; // Adjust the path according to your project structure
+import { useAuth } from '../../provider/AuthProvider'; // Adjust the path according to your project structure
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { db, storage } from '../FirebaseConfig';
+import { db, storage } from '../../FirebaseConfig';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import Modal from './ProfileModal';
 
