@@ -6,6 +6,9 @@ import { doc, getDoc } from 'firebase/firestore';
 interface User extends FirebaseUser {
   username?: string;
   role?: string;
+  address?: string;
+  profilePicture?: string;
+  phoneNumber?: string | null; // Ensure phoneNumber is string or null, not undefined
 }
 
 interface AuthContextType {
@@ -25,9 +28,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const userDoc = await getDoc(doc(db, 'Users', firebaseUser.uid));
         if (userDoc.exists()) {
           const userData = userDoc.data();
-          setUser({ ...firebaseUser, username: userData?.username, role: userData?.role });
+          setUser({
+            ...firebaseUser,
+            username: userData?.username,
+            role: userData?.role,
+            address: userData?.address,
+            profilePicture: userData?.profilePicture,
+            phoneNumber: userData?.phoneNumber || null, // Ensure phoneNumber is null if not present
+          });
         } else {
-          setUser(firebaseUser);
+          setUser({
+            ...firebaseUser,
+            phoneNumber: null // Explicitly set phoneNumber to null if not present
+          } as User);
         }
       } else {
         setUser(null);

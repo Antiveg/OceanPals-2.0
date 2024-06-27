@@ -44,14 +44,22 @@ const Navbar: React.FC<NavbarProps> = ({ title }) => {
               >
                 <span className="sr-only">Open user menu</span>
                 <div className="relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
-                  <span className="font-medium text-gray-600 dark:text-gray-300">
-                    {user.username ? user.username.substring(0, 2).toUpperCase() : 'US'}
-                  </span>
+                  {user.profilePicture ? (
+                    <img
+                      src={user.profilePicture}
+                      alt="Profile"
+                      className="w-full h-full object-cover rounded-full"
+                    />
+                  ) : (
+                    <span className="font-medium text-gray-600 dark:text-gray-300">
+                      {user.username ? user.username.substring(0, 2).toUpperCase() : 'US'}
+                    </span>
+                  )}
                 </div>
               </button>
               {dropdownOpen && (
                 <div
-                  className="absolute right-0 top-[4.5rem] mt-2 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
+                  className="absolute right-0 top-[4.5rem] mt-2 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600 z-50"
                   id="user-dropdown"
                 >
                   <div className="px-4 py-3">
