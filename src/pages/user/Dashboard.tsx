@@ -8,7 +8,7 @@ interface Event {
   title: string;
   description: string;
   image: string;
-  points: number;
+  point: number;
   place: string;
   date: string;
 }
@@ -48,10 +48,10 @@ const Dashboard: React.FC = () => {
               if (eventDoc.exists()) {
                 const eventData = eventDoc.data();
                 setCurrentEvent({
-                  title: eventData.title,
-                  description: eventData.description,
+                  title: eventData.name,
+                  description: eventData.shortDescription,
                   image: eventData.image,
-                  points: eventData.points,
+                  point: eventData.point,
                   place: eventData.place,
                   date: eventData.date,
                 });
@@ -83,15 +83,15 @@ const Dashboard: React.FC = () => {
           <h1 className="text-gray-900 dark:text-white text-3xl md:text-5xl font-extrabold mb-2">My Current Events</h1>
           {currentEvent ? (
             <div className="max-w-xs overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 mb-6">
-              <div className="px-4 py-2">
+              <div className="px-4 py-2 mt-4 rounded-t-xl bg-blue-700">
                 <h1 className="text-xl font-bold text-gray-800 dark:text-white">{currentEvent.title}</h1>
-                <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">{currentEvent.description}</p>
-                <p className="mt-1 text-sm text-gray-600 dark:text-gray-400"><strong>Location:</strong> {currentEvent.place}</p>
-                <p className="mt-1 text-sm text-gray-600 dark:text-gray-400"><strong>Date:</strong> {new Date(currentEvent.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}</p>
+                <p className="mt-1 text-sm text-gray-600 dark:text-gray-200">{currentEvent.description}</p>
+                <p className="mt-1 text-sm text-gray-600 dark:text-gray-200"><strong>Location:</strong> {currentEvent.place}</p>
+                <p className="mt-1 text-sm text-gray-600 dark:text-gray-200"><strong>Date:</strong> {new Date(currentEvent.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}</p>
               </div>
-              <img className="object-cover w-full h-48 mt-2" src={currentEvent.image} alt={currentEvent.title} />
+              <img className="object-cover w-full h-48" src={currentEvent.image} alt={currentEvent.title} />
               <div className="flex items-center justify-between px-4 py-2 bg-blue-700">
-                <h1 className="text-lg font-bold text-white">{currentEvent.points} Points</h1>
+                <h1 className="text-lg font-bold text-white">{currentEvent.point} Points</h1>
               </div>
             </div>
           ) : (

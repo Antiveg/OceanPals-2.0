@@ -178,7 +178,7 @@ const Task: React.FC<TaskProps> = ({ userTasks, eventPoints }) => {
 
     const handleFinishAllTasks = async () => {
         if(user){
-            const halfPoints = eventPoints / 2;
+            const halfPoints = eventPoints;
             const userRef = doc(db, 'Users', user.uid);
 
             const userSnapshot = await getDoc(userRef);

@@ -23,6 +23,7 @@ import EventDashboard from "./pages/user/EventDashboard";
 import Forum from "./pages/Forum";
 import EventManagement from "./pages/admin/EventManagement";
 import EventApproval from "./pages/admin/EventApproval";
+import History from "./pages/user/History";
 
 function App() {
 
@@ -47,6 +48,7 @@ function App() {
             <Route path="/store" element={<Store />}/>
             <Route path="/profile" element={<Profile />}/>
             <Route path="/ranking" element={<Ranking />}/>
+            <Route path="/history" element={<History />}/>
           </Route>
           <Route path="/" element={<AdminLayout />}>
             <Route path="/admin/dashboard" element={<AdminDashboard />}/>

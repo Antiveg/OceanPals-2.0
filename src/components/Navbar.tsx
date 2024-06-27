@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { auth } from '../FirebaseConfig'; // Ensure this points to your Firebase configuration
 import { useAuth } from '../provider/AuthProvider'; // Adjust the path according to your project structure
@@ -11,6 +11,12 @@ const Navbar: React.FC<NavbarProps> = ({ title }) => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  useEffect(() => {
+    if (!loading && !user) {
+      navigate('/login');
+    }
+  }, [user, loading, navigate]);
 
   const handleLogout = async () => {
     await auth.signOut();
@@ -75,6 +81,11 @@ const Navbar: React.FC<NavbarProps> = ({ title }) => {
                     <li>
                       <Link to="/ranking" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
                         Ranking
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/history" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
+                        History
                       </Link>
                     </li>
                     <li>

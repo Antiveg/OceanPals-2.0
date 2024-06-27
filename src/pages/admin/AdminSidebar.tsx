@@ -5,26 +5,36 @@ import { useAuth } from '../../provider/AuthProvider'; // Adjust the path accord
 import { doc, getDoc } from 'firebase/firestore';
 
 const AdminSidebar: React.FC = () => {
-    const { user } = useAuth();
+    const { user, loading } = useAuth();
     const navigate = useNavigate();
     const [profilePicture, setProfilePicture] = useState<string | null>(null);
     const [isExpanded, setIsExpanded] = useState(true);
+    const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
 
     useEffect(() => {
-        const fetchProfilePicture = async () => {
+        const checkAdmin = async () => {
             if (user) {
                 const userDoc = await getDoc(doc(db, 'Users', user.uid));
                 if (userDoc.exists()) {
                     const userData = userDoc.data();
+                    setIsAdmin(userData.role === 'admin');
                     if (userData && userData.profilePicture) {
                         setProfilePicture(userData.profilePicture);
                     }
                 }
+            } else {
+                setIsAdmin(false);
             }
         };
 
-        fetchProfilePicture();
+        checkAdmin();
     }, [user]);
+
+    useEffect(() => {
+        if (!loading && (isAdmin === false || !user)) {
+            navigate('/login');
+        }
+    }, [loading, isAdmin, user, navigate]);
 
     const handleLogout = async () => {
         try {
@@ -42,6 +52,10 @@ const AdminSidebar: React.FC = () => {
     const toggleSidebar = () => {
         setIsExpanded(!isExpanded);
     };
+
+    if (loading || isAdmin === null) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <section className={`flex flex-col ${isExpanded ? 'w-64' : 'w-20'} h-screen px-4 py-8 overflow-y-auto bg-white border-r rtl:border-r-0 rtl:border-l dark:bg-gray-900 dark:border-gray-700 transition-width duration-300`}>

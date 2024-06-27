@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { doc, getDoc, updateDoc, setDoc, arrayUnion } from 'firebase/firestore';
 import { db } from '../../FirebaseConfig';
 import { useAuth } from '../../provider/AuthProvider';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const EventDetail: React.FC = () => {
   const { eventId } = useParams<{ eventId: string }>();
@@ -26,31 +28,43 @@ const EventDetail: React.FC = () => {
 
   const handleJoinEvent = async () => {
     if (user && eventId) {
-      const eventRef = doc(db, 'Events', eventId);
-      await updateDoc(eventRef, {
-        participants: arrayUnion(user.uid),
-      });
-
       const userRef = doc(db, 'Users', user.uid);
-      await updateDoc(userRef, {
-        activeEventId: eventId,
-      });
+      const userDoc = await getDoc(userRef);
+      
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        
+        if (userData.activeEventId) {
+          toast.error('You already have an active event. Please complete it before joining a new one.');
+          return;
+        }
 
-      // Initialize task progress for the user
-      const userTaskProgressRef = doc(db, 'Users', user.uid, 'UserTaskProgress', eventId);
-      const initialTasks = [
-        { taskId: '1', name: 'Take a before photo', status: 'notDone' },
-        { taskId: '2', name: 'Start the countdown', status: 'notDone' },
-        { taskId: '3', name: 'Take an after photo', status: 'notDone' },
-        { taskId: '4', name: 'Calculate waste weight', status: 'notDone' }
-      ];
+        const eventRef = doc(db, 'Events', eventId);
+        await updateDoc(eventRef, {
+          participants: arrayUnion(user.uid),
+        });
 
-      await setDoc(userTaskProgressRef, {
-        eventId,
-        tasks: initialTasks
-      });
+        await updateDoc(userRef, {
+          activeEventId: eventId,
+        });
 
-      navigate('/home');
+        // Initialize task progress for the user
+        const userTaskProgressRef = doc(db, 'Users', user.uid, 'UserTaskProgress', eventId);
+        const initialTasks = [
+          { taskId: '1', name: 'Take a before photo', status: 'notDone' },
+          { taskId: '2', name: 'Start the countdown', status: 'notDone' },
+          { taskId: '3', name: 'Take an after photo', status: 'notDone' },
+          { taskId: '4', name: 'Calculate waste weight', status: 'notDone' }
+        ];
+
+        await setDoc(userTaskProgressRef, {
+          eventId,
+          tasks: initialTasks
+        });
+
+        toast.success('You have successfully joined the event.');
+        navigate('/home');
+      }
     }
   };
 
@@ -237,9 +251,9 @@ const EventDetail: React.FC = () => {
           </div>
         </>
       )}
+      <ToastContainer />
     </section>
   );
 };
 
 export default EventDetail;
-``

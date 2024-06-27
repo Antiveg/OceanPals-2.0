@@ -17,6 +17,7 @@
     "chart.js": "^4.4.3",
     "firebase": "^10.12.2",
     "flowbite": "^2.3.0",
+    "js-cookie": "^3.0.5",
     "react": "^18.3.1",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.3.1",
@@ -26,6 +27,7 @@
     "react-toastify": "^10.0.5"
   },
   "devDependencies": {
+    "@types/js-cookie": "^3.0.6",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@types/react-modal": "^3.16.3",
