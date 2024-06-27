@@ -101,7 +101,7 @@ const EventDashboard: React.FC = () => {
                             <li>Time: {new Date(event.date).toLocaleTimeString()}</li>
                         </ul>
                     </div>
-                    <EventGuide />
+                    {eventId && <EventGuide eventId={eventId} />}
                 </div>
 
                 <Task tasks={event.tasks || []} userTasks={userTasks || []} eventPoints={event.point} />

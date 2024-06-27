@@ -13,13 +13,14 @@ import Store from "./pages/Store";
 import Profile from "./pages/Profile";
 import Event from "./pages/user/Event";
 import EventDetail from "./pages/user/EventDetail";
-import Ranking from "./pages/Rank";
+import Ranking from "./pages/Ranking";
 import NotFound from "./pages/NotFound";
 import AdminLayout from "./layout/AdminLayout";
 import CRUDPanel from "./pages/admin/CRUDPanel";
 import AdminProfile from "./pages/admin/AdminProfile";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import EventDashboard from "./pages/user/EventDashboard";
+import Forum from "./pages/Forum";
 
 function App() {
 
@@ -36,6 +37,7 @@ function App() {
             <Route path="/events" element={<Event />} />
             <Route path="/events/:eventId" element={<EventDetail />} />
             <Route path="/events/dashboard/:eventId" element={<EventDashboard />} />
+            <Route path="/events/forum/:eventId" element={<Forum />} />
             <Route path="/recruitment" element={<Recruitment />} />
             <Route path="/recruitment/detail" element={<RecruitmentDetail />} />
             <Route path="/training" element={<Training />} />

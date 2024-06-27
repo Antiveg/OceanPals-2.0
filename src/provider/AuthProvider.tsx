@@ -8,7 +8,7 @@ interface User extends FirebaseUser {
   role?: string;
   address?: string;
   profilePicture?: string;
-  phoneNumber?: string | null; // Ensure phoneNumber is string or null, not undefined
+  // phoneNumber?: string | null; // Ensure phoneNumber is string or null, not undefined
 }
 
 interface AuthContextType {

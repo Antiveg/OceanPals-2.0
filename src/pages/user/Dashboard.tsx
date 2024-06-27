@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { db } from '../../FirebaseConfig'; // Ensure this points to your Firebase configuration
 import { useAuth } from '../../provider/AuthProvider'; // Adjust the path according to your project structure
-import { getDoc, doc } from 'firebase/firestore';
+import { getDoc, doc, collection, query, where, getDocs } from 'firebase/firestore';
 
 interface Event {
   title: string;
@@ -29,15 +29,16 @@ const Dashboard: React.FC = () => {
             const userData = userDoc.data();
             setPoint(userData?.point ?? 0);
 
-            // Fetching ranking (this is a placeholder logic)
-            const rankingsDoc = await getDoc(doc(db, 'Rankings', user.uid));
-            if (rankingsDoc.exists()) {
-              const rankingData = rankingsDoc.data();
-              const totalUsers = (await getDoc(doc(db, 'Meta', 'totalUsers'))).data()?.count ?? 0;
-              setRanking(`${rankingData?.position}/${totalUsers}`);
-            } else {
-              setRanking('N/A');
-            }
+            // Fetching and calculating ranking
+            const usersQuery = query(collection(db, 'Users'), where('role', '==', 'member'));
+            const usersSnapshot = await getDocs(usersQuery);
+            const usersData = usersSnapshot.docs.map(doc => doc.data());
+            const sortedUsers = usersData.sort((a, b) => b.point - a.point);
+            const userRank = sortedUsers.findIndex(u => u.uid === user.uid) + 1;
+            const totalUsers = sortedUsers.length;
+            setRanking(`${userRank}/${totalUsers}`);
+
+            console.log(userRank);
 
             // Fetch current event
             const activeEventId = userData?.activeEventId;
@@ -69,7 +70,7 @@ const Dashboard: React.FC = () => {
   }, [user]);
 
   return (
-    <section className="bg-gradient-to-tr from-teal-50 to-blue-200">
+    <section className="bg-gradient-to-tr from-teal-50 to-blue-200 text-left">
       <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16">
         {/* Card Above */}
         <div className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-8 md:p-12 mb-8">
