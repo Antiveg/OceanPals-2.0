@@ -1,53 +1,48 @@
 import React, { useState, useEffect } from 'react';
-import { addDoc, collection, updateDoc } from 'firebase/firestore';
+import { addDoc, collection } from 'firebase/firestore';
 import { db, storage } from '../../../FirebaseConfig'; // Ensure this points to your Firebase configuration
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 
-const AddEventModal: React.FC<{ isOpen: boolean; onClose: () => void; fetchData: () => void; }> = ({ isOpen, onClose, fetchData }) => {
+const AddTrainingModal: React.FC<{ isOpen: boolean; onClose: () => void; fetchData: () => void; }> = ({ isOpen, onClose, fetchData }) => {
     const [formData, setFormData] = useState({
         name: '',
+        category: 'Environment',
         shortDescription: '',
         fullDescription: '',
         image: '',
-        location: '',
-        latitude: 0,
-        longitude: 0,
+        authorName: '',
+        authorImage: '',
+        authorPosition: '',
         date: '',
-        time: '',
-        special: false,
-        place: '',
-        point: 0,
+        timestamp: new Date(),
     });
     const [imageFile, setImageFile] = useState<File | null>(null);
+    const [authorImageFile, setAuthorImageFile] = useState<File | null>(null);
 
     useEffect(() => {
-        // Reset form data when modal is opened
         if (isOpen) {
             setFormData({
                 name: '',
+                category: 'Environment',
                 shortDescription: '',
                 fullDescription: '',
                 image: '',
-                location: '',
-                latitude: 0,
-                longitude: 0,
+                authorName: '',
+                authorImage: '',
+                authorPosition: '',
                 date: '',
-                time: '',
-                special: false,
-                place: '',
-                point: 0,
+                timestamp: new Date(),
             });
             setImageFile(null);
+            setAuthorImageFile(null);
         }
     }, [isOpen]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const { name, value, type } = e.target;
-        const checked = type === 'checkbox' ? (e.target as HTMLInputElement).checked : undefined;
+        const { name, value } = e.target;
         setFormData({
             ...formData,
-            [name]: checked !== undefined ? checked : value,
+            [name]: value,
         });
     };
 
@@ -57,54 +52,40 @@ const AddEventModal: React.FC<{ isOpen: boolean; onClose: () => void; fetchData:
         }
     };
 
+    const handleAuthorImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            setAuthorImageFile(e.target.files[0]);
+        }
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
             let imageUrl = '';
             if (imageFile) {
-                const imageRef = ref(storage, `events/${imageFile.name}`);
+                const imageRef = ref(storage, `trainings/${imageFile.name}`);
                 await uploadBytes(imageRef, imageFile);
                 imageUrl = await getDownloadURL(imageRef);
             }
 
-            const newEventRef = await addDoc(collection(db, 'Events'), {
+            let authorImageUrl = '';
+            if (authorImageFile) {
+                const authorImageRef = ref(storage, `authors/${authorImageFile.name}`);
+                await uploadBytes(authorImageRef, authorImageFile);
+                authorImageUrl = await getDownloadURL(authorImageRef);
+            }
+
+            await addDoc(collection(db, 'Training'), {
                 ...formData,
                 image: imageUrl,
+                authorImage: authorImageUrl,
+                timestamp: new Date(),
             });
-
-            await updateDoc(newEventRef, {
-                eventId: newEventRef.id,
-            });
-
             fetchData();
             onClose();
         } catch (error) {
             console.error('Error adding document: ', error);
         }
-    };
-
-    const handleMapClick = (event: google.maps.MapMouseEvent) => {
-        if (event.latLng) {
-            setFormData({
-                ...formData,
-                latitude: event.latLng.lat(),
-                longitude: event.latLng.lng(),
-            });
-        }
-    };
-
-    const onLoad = (map: google.maps.Map) => {
-        console.log('Map loaded:', map);
-    };
-
-    const containerStyle = {
-        width: '100%',
-        height: '400px',
-    };
-
-    const center = {
-        lat: formData.latitude,
-        lng: formData.longitude,
     };
 
     if (!isOpen) {
@@ -116,7 +97,7 @@ const AddEventModal: React.FC<{ isOpen: boolean; onClose: () => void; fetchData:
             <div className="fixed inset-0 bg-black opacity-50" onClick={onClose}></div>
             <div className="relative bg-gray-800 rounded-lg shadow-lg p-6 max-w-lg w-full mx-auto max-h-[90%] overflow-y-auto">
                 <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-gray-100">Add New Event</h3>
+                    <h3 className="text-lg font-semibold text-gray-100">Add New Training</h3>
                     <button 
                         type="button" 
                         className="text-gray-400 hover:bg-gray-600 hover:text-gray-100 rounded-lg text-sm p-1.5" 
@@ -136,11 +117,26 @@ const AddEventModal: React.FC<{ isOpen: boolean; onClose: () => void; fetchData:
                                 name="name" 
                                 id="name" 
                                 className="bg-gray-700 border border-gray-600 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
-                                placeholder="Type event name" 
+                                placeholder="Type training name" 
                                 required 
                                 value={formData.name} 
                                 onChange={handleChange} 
                             />
+                        </div>
+                        <div>
+                            <label htmlFor="category" className="block mb-2 text-sm font-medium text-gray-100">Category</label>
+                            <select 
+                                name="category" 
+                                id="category" 
+                                className="bg-gray-700 border border-gray-600 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
+                                required 
+                                value={formData.category} 
+                                onChange={handleChange}
+                            >
+                                <option value="Environment">Environment</option>
+                                <option value="Technology">Technology</option>
+                                <option value="Tips & Trick">Tips & Trick</option>
+                            </select>
                         </div>
                         <div>
                             <label htmlFor="shortDescription" className="block mb-2 text-sm font-medium text-gray-100">Short Description</label>
@@ -168,19 +164,6 @@ const AddEventModal: React.FC<{ isOpen: boolean; onClose: () => void; fetchData:
                             />
                         </div>
                         <div>
-                            <label htmlFor="point" className="block mb-2 text-sm font-medium text-gray-100">Point</label>
-                            <input
-                                type='number' 
-                                name="point" 
-                                id="point" 
-                                className="bg-gray-700 border border-gray-600 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
-                                placeholder="Type point" 
-                                required 
-                                value={formData.point} 
-                                onChange={handleChange} 
-                            />
-                        </div>
-                        <div>
                             <label htmlFor="image" className="block mb-2 text-sm font-medium text-gray-100">Image</label>
                             <input 
                                 type="file" 
@@ -191,15 +174,38 @@ const AddEventModal: React.FC<{ isOpen: boolean; onClose: () => void; fetchData:
                             />
                         </div>
                         <div>
-                            <label htmlFor="place" className="block mb-2 text-sm font-medium text-gray-100">Place</label>
+                            <label htmlFor="authorName" className="block mb-2 text-sm font-medium text-gray-100">Author Name</label>
                             <input 
                                 type="text" 
-                                name="place" 
-                                id="place" 
+                                name="authorName" 
+                                id="authorName" 
                                 className="bg-gray-700 border border-gray-600 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
-                                placeholder="Type event place" 
+                                placeholder="Type author name" 
                                 required 
-                                value={formData.place} 
+                                value={formData.authorName} 
+                                onChange={handleChange} 
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="authorImage" className="block mb-2 text-sm font-medium text-gray-100">Author Image</label>
+                            <input 
+                                type="file" 
+                                name="authorImage" 
+                                id="authorImage" 
+                                className="bg-gray-700 border border-gray-600 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
+                                onChange={handleAuthorImageChange} 
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="authorPosition" className="block mb-2 text-sm font-medium text-gray-100">Author Position</label>
+                            <input 
+                                type="text" 
+                                name="authorPosition" 
+                                id="authorPosition" 
+                                className="bg-gray-700 border border-gray-600 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
+                                placeholder="Type author position" 
+                                required 
+                                value={formData.authorPosition} 
                                 onChange={handleChange} 
                             />
                         </div>
@@ -215,53 +221,12 @@ const AddEventModal: React.FC<{ isOpen: boolean; onClose: () => void; fetchData:
                                 onChange={handleChange} 
                             />
                         </div>
-                        <div>
-                            <label htmlFor="time" className="block mb-2 text-sm font-medium text-gray-100">Time</label>
-                            <input 
-                                type="time" 
-                                name="time" 
-                                id="time" 
-                                className="bg-gray-700 border border-gray-600 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
-                                required 
-                                value={formData.time} 
-                                onChange={handleChange} 
-                            />
-                        </div>
-                        <div className="flex items-center mb-4">
-                            <input
-                                id="special"
-                                name="special"
-                                type="checkbox"
-                                checked={formData.special}
-                                onChange={handleChange}
-                                className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500 dark:focus:ring-blue-600 focus:ring-2"
-                            />
-                            <label htmlFor="special" className="ml-2 text-sm font-medium text-gray-100">
-                                Special
-                            </label>
-                        </div>
-                        <div className="col-span-2">
-                            <label className="block mb-2 text-sm font-medium text-gray-100">Location</label>
-                            <LoadScript googleMapsApiKey="AIzaSyCC4uvj9fFdWhDTi9qo-0zMQuj_odeEUFE">
-                                <GoogleMap
-                                    mapContainerStyle={containerStyle}
-                                    center={center}
-                                    zoom={10}
-                                    onClick={handleMapClick}
-                                    onLoad={onLoad}
-                                >
-                                    {formData.latitude && formData.longitude && (
-                                        <Marker position={{ lat: formData.latitude, lng: formData.longitude }} />
-                                    )}
-                                </GoogleMap>
-                            </LoadScript>
-                        </div>
                     </div>
                     <button 
                         type="submit" 
                         className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     >
-                        Add new event
+                        Add new training
                     </button>
                 </form>
             </div>
@@ -269,4 +234,4 @@ const AddEventModal: React.FC<{ isOpen: boolean; onClose: () => void; fetchData:
     );
 };
 
-export default AddEventModal;
+export default AddTrainingModal;

@@ -7,8 +7,8 @@ import Layout from "./layout/Layout";
 import Dashboard from "./pages/user/Dashboard";
 import Recruitment from "./pages/user/Recruitment";
 import RecruitmentDetail from "./pages/user/RecruitmentDetail";
-import Training from "./pages/Training";
-import TrainingDetail from "./pages/TrainingDetail";
+import Training from "./pages/user/Training";
+import TrainingDetail from "./pages/user/TrainingDetail";
 import Store from "./pages/user/Store";
 import Profile from "./pages/user/Profile";
 import Event from "./pages/user/Event";
@@ -44,7 +44,7 @@ function App() {
             <Route path="/recruitment" element={<Recruitment />} />
             <Route path="/recruitment/:volunteerId" element={<RecruitmentDetail />} />
             <Route path="/training" element={<Training />} />
-            <Route path="/training/detail" element={<TrainingDetail />} />
+            <Route path="/training/:trainingId" element={<TrainingDetail />} />
             <Route path="/store" element={<Store />}/>
             <Route path="/profile" element={<Profile />}/>
             <Route path="/ranking" element={<Ranking />}/>

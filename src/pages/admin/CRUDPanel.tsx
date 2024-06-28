@@ -9,6 +9,8 @@ import AddVolunteerModal from './VolunteerModal/AddVolunteerModal';
 import EditVolunteerModal from './VolunteerModal/EditVolunteerModal';
 import AddStoreModal from './StoreModal/AddStoreModal';
 import EditStoreModal from './StoreModal/EditStoreModal';
+import AddTrainingModal from './TrainingModal/AddTrainingModal';
+import EditTrainingModal from './TrainingModal/EditTrainingModal';
 import ConfirmationModal from './ConfirmationModal'; // Import ConfirmationModal
 
 const CRUDPanel: React.FC = () => {
@@ -22,11 +24,16 @@ const CRUDPanel: React.FC = () => {
 
     const fetchData = async () => {
         const querySnapshot = await getDocs(collection(db, type));
-        const fetchedData = querySnapshot.docs.map((doc, index) => ({
-            ...doc.data(),
-            id: doc.id,
-            index: index + 1,
-        }));
+        const fetchedData = querySnapshot.docs.map((doc, index) => {
+            const data2 = doc.data();
+            return {
+                ...data2,
+                id: doc.id,
+                index: index + 1,
+                date: data2.date && typeof data2.date.toDate === 'function' ? data2.date.toDate().toLocaleDateString() : data2.date,
+                timestamp: data2.timestamp && typeof data2.timestamp.toDate === 'function' ? data2.timestamp.toDate().toLocaleString() : data2.timestamp
+            };
+        });
         setData(fetchedData);
     };
 
@@ -69,62 +76,82 @@ const CRUDPanel: React.FC = () => {
     };
 
     const renderTableHeaders = () => {
-        if (type === 'Users') {
-            return (
-                <>
-                    <th>No.</th>
-                    <th>Username</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>Profile Picture</th>
-                    <th>Points</th>
-                    <th>Action</th>
-                </>
-            );
-        } else if (type === 'Events') {
-            return (
-                <>
-                    <th>No.</th>
-                    <th>Name</th>
-                    <th>Short Description</th>
-                    <th>Full Description</th>
-                    <th>Point</th>
-                    <th>Image</th>
-                    <th>Location</th>
-                    <th>Latitude</th>
-                    <th>Longitude</th>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Status</th>
-                    <th>Special</th>
-                    <th>Participants</th>
-                    <th>Action</th>
-                </>
-            );
-        } else if (type === 'Volunteers') {
-            return (
-                <>
-                    <th>No.</th>
-                    <th>Name</th>
-                    <th>Short Description</th>
-                    <th>Full Description</th>
-                    <th>Image</th>
-                    <th>Current Volunteered User</th>
-                    <th>Action</th>
-                </>
-            );
-        } else if (type === 'Stores') {
-            return (
-                <>
-                    <th>No.</th>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Image</th>
-                    <th>Point</th>
-                    <th>Stock</th>
-                    <th>Action</th>
-                </>
-            );
+        switch (type) {
+            case 'Users':
+                return (
+                    <>
+                        <th className="whitespace-nowrap">No.</th>
+                        <th className="whitespace-nowrap text-left">Username</th>
+                        <th className="whitespace-nowrap text-left">Email</th>
+                        <th className="whitespace-nowrap text-left">Role</th>
+                        <th className="whitespace-nowrap text-left">Profile Picture</th>
+                        <th className="whitespace-nowrap text-left">Points</th>
+                        <th className="whitespace-nowrap text-left">Action</th>
+                    </>
+                );
+            case 'Events':
+                return (
+                    <>
+                        <th className="whitespace-nowrap">No.</th>
+                        <th className="whitespace-nowrap text-left">Name</th>
+                        <th className="whitespace-nowrap text-left">Short Description</th>
+                        <th className="whitespace-nowrap text-left">Full Description</th>
+                        <th className="whitespace-nowrap text-left">Point</th>
+                        <th className="whitespace-nowrap text-left">Image</th>
+                        <th className="whitespace-nowrap text-left">Location</th>
+                        <th className="whitespace-nowrap text-left">Latitude</th>
+                        <th className="whitespace-nowrap text-left">Longitude</th>
+                        <th className="whitespace-nowrap text-left">Date</th>
+                        <th className="whitespace-nowrap text-left">Time</th>
+                        <th className="whitespace-nowrap text-left">Status</th>
+                        <th className="whitespace-nowrap text-left">Special</th>
+                        <th className="whitespace-nowrap text-left">Participants</th>
+                        <th className="whitespace-nowrap text-left">Action</th>
+                    </>
+                );
+            case 'Volunteers':
+                return (
+                    <>
+                        <th className="whitespace-nowrap">No.</th>
+                        <th className="whitespace-nowrap text-left">Name</th>
+                        <th className="whitespace-nowrap text-left">Short Description</th>
+                        <th className="whitespace-nowrap text-left">Full Description</th>
+                        <th className="whitespace-nowrap text-left">Image</th>
+                        <th className="whitespace-nowrap text-left">Current Volunteered User</th>
+                        <th className="whitespace-nowrap text-left">Action</th>
+                    </>
+                );
+            case 'Stores':
+                return (
+                    <>
+                        <th className="whitespace-nowrap">No.</th>
+                        <th className="whitespace-nowrap text-left">Name</th>
+                        <th className="whitespace-nowrap text-left">Description</th>
+                        <th className="whitespace-nowrap text-left">Image</th>
+                        <th className="whitespace-nowrap text-left">Point</th>
+                        <th className="whitespace-nowrap text-left">Stock</th>
+                        <th className="whitespace-nowrap text-left">Action</th>
+                    </>
+                );
+            case 'Training':
+                return (
+                    <>
+                        <th className="whitespace-nowrap">No.</th>
+                        <th className="whitespace-nowrap text-left">Name</th>
+                        <th className="whitespace-nowrap text-left">Category</th>
+                        <th className="whitespace-nowrap text-left">Short Description</th>
+                        <th className="whitespace-nowrap text-left">Full Description</th>
+                        <th className="whitespace-nowrap text-left">Image</th>
+                        <th className="whitespace-nowrap text-left">Author Image</th>
+                        <th className="whitespace-nowrap text-left">Author Name</th>
+                        <th className="whitespace-nowrap text-left">Author Position</th>
+                        <th className="whitespace-nowrap text-left">Timestamp</th>
+                        <th className="whitespace-nowrap text-left">Date</th>
+                        <th className="whitespace-nowrap text-left">Action</th>
+                    </>
+                );
+            default:
+                return null;
         }
     };
 
@@ -141,33 +168,33 @@ const CRUDPanel: React.FC = () => {
 
         return data.map((item) => (
             <tr key={item.id}>
-                <td>{item.index}</td>
-                <td>{item.username || item.name}</td>
+                <td className="text-center">{item.index}</td>
+                <td className="text-left">{item.username || item.name}</td>
                 {type === 'Users' && (
                     <>
-                        <td>{item.email}</td>
-                        <td>{item.role}</td>
-                        <td>
+                        <td className="text-left">{item.email}</td>
+                        <td className="text-left">{item.role}</td>
+                        <td className="text-left">
                             <img src={item.profilePicture} alt={item.username} style={{ width: '50px', height: '50px', borderRadius: '50%' }} />
                         </td>
-                        <td>{item.point}</td>
+                        <td className="text-left">{item.point}</td>
                     </>
                 )}
                 {type === 'Events' && (
                     <>
-                        <td>{item.shortDescription}</td>
-                        <td>{item.fullDescription}</td>
-                        <td>{item.point}</td>
-                        <td>
+                        <td className="text-left">{item.shortDescription}</td>
+                        <td className="text-left">{item.fullDescription}</td>
+                        <td className="text-left">{item.point}</td>
+                        <td className="text-left">
                             <img src={item.image} alt={item.name} style={{ width: '100px', height: '100px' }} />
                         </td>
-                        <td>{item.place}</td>
-                        <td>{item.latitude}</td>
-                        <td>{item.longitude}</td>
-                        <td>{item.date}</td>
-                        <td>{item.time}</td>
-                        <td>{new Date(item.date + ' ' + item.time) < new Date() ? 'Finished' : 'Unfinished'}</td>
-                        <td>{item.special ? 'Yes' : 'No'}</td>
+                        <td className="text-left">{item.place}</td>
+                        <td className="text-left">{item.latitude}</td>
+                        <td className="text-left">{item.longitude}</td>
+                        <td className="text-left">{item.date}</td>
+                        <td className="text-left">{item.time}</td>
+                        <td className="text-left">{new Date(item.date + ' ' + item.time) < new Date() ? 'Finished' : 'Unfinished'}</td>
+                        <td className="text-left">{item.special ? 'Yes' : 'No'}</td>
                         <td className="px-4 py-4 text-sm whitespace-nowrap">
                             <div className="flex items-center">
                                 {item.participants && item.participants.slice(0, 4).map((participant: string, index: number) => (
@@ -184,25 +211,45 @@ const CRUDPanel: React.FC = () => {
                 )}
                 {type === 'Volunteers' && (
                     <>
-                        <td>{item.shortDescription}</td>
-                        <td>{item.fullDescription}</td>
-                        <td>
+                        <td className="text-left">{item.shortDescription}</td>
+                        <td className="text-left">{item.fullDescription}</td>
+                        <td className="text-left">
                             <img src={item.image} alt={item.name} style={{ width: '100px', height: '100px' }} />
                         </td>
-                        <td>{item.currentVolunteeredUser}</td>
+                        <td className="text-left">{item.currentVolunteeredUser}</td>
                     </>
                 )}
                 {type === 'Stores' && (
                     <>
-                        <td>{item.description}</td>
-                        <td>
+                        <td className="text-left">{item.description}</td>
+                        <td className="text-left">
                             <img src={item.image} alt={item.name} style={{ width: '100px', height: '100px' }} />
                         </td>
-                        <td>{item.point}</td>
-                        <td>{item.stock}</td>
+                        <td className="text-left">{item.point}</td>
+                        <td className="text-left">{item.stock}</td>
                     </>
                 )}
-                <td>
+                {type === 'Training' && (
+                    <>
+                        <td className="text-left">{item.category}</td>
+                        <td className="text-left">{item.shortDescription}</td>
+                        <td className="text-left">{item.fullDescription}</td>
+                        <td className="text-left">
+                            <img src={item.image} alt={item.name} style={{ width: '100px', height: '100px' }} />
+                        </td>
+                        <td className="text-left">
+                            <div className="flex items-center">
+                                <img src={item.authorImage} alt={item.author} style={{ width: '30px', height: '30px', borderRadius: '50%' }} />
+                                <span className="ml-2">{item.author}</span>
+                            </div>
+                        </td>
+                        <td className="text-left">{item.authorName}</td>
+                        <td className="text-left">{item.authorPosition}</td>
+                        <td className="text-left">{item.timestamp}</td>
+                        <td className="text-left">{item.date}</td>
+                    </>
+                )}
+                <td className="text-left">
                     <button onClick={() => openEditModal(item)}>Edit</button>
                     <button onClick={() => openConfirmationModal(item)}>Delete</button>
                 </td>
@@ -250,15 +297,18 @@ const CRUDPanel: React.FC = () => {
                     <button onClick={() => setType('Stores')} className={`px-5 py-2 text-xs font-medium ${type === 'Stores' ? 'bg-gray-100 dark:bg-gray-800' : 'text-gray-600'} transition-colors duration-200 sm:text-sm dark:text-gray-300`}>
                         Stores
                     </button>
+                    <button onClick={() => setType('Training')} className={`px-5 py-2 text-xs font-medium ${type === 'Training' ? 'bg-gray-100 dark:bg-gray-800' : 'text-gray-600'} transition-colors duration-200 sm:text-sm dark:text-gray-300`}>
+                        Training
+                    </button>
                 </div>
-                <div className="relative flex items-center mt-4 md:mt-0">
+                {/* <div className="relative flex items-center mt-4 md:mt-0">
                     <span className="absolute">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5 mx-3 text-gray-400 dark:text-gray-600">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
                         </svg>
                     </span>
                     <input type="text" placeholder="Search" className="block w-full py-1.5 pr-5 text-gray-700 bg-white border border-gray-200 rounded-lg md:w-80 placeholder-gray-400/70 pl-11 rtl:pr-11 rtl:pl-5 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"/>
-                </div>
+                </div> */}
             </div>
             <div className="flex flex-col mt-6">
                 <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -270,7 +320,7 @@ const CRUDPanel: React.FC = () => {
                                         {renderTableHeaders()}
                                     </tr>
                                 </thead>
-                                <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
+                                <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900 text-left">
                                     {renderTableRows()}
                                 </tbody>
                             </table>
@@ -282,10 +332,12 @@ const CRUDPanel: React.FC = () => {
             <AddEventModal isOpen={addModalIsOpen && type === 'Events'} onClose={closeAddModal} fetchData={fetchData} />
             <AddVolunteerModal isOpen={addModalIsOpen && type === 'Volunteers'} onClose={closeAddModal} fetchData={fetchData} />
             <AddStoreModal isOpen={addModalIsOpen && type === 'Stores'} onClose={closeAddModal} fetchData={fetchData} />
+            <AddTrainingModal isOpen={addModalIsOpen && type === 'Training'} onClose={closeAddModal} fetchData={fetchData} />
             <EditUserModal isOpen={editModalIsOpen && type === 'Users'} onClose={closeEditModal} fetchData={fetchData} userData={selectedItem} />
             <EditEventModal isOpen={editModalIsOpen && type === 'Events'} onClose={closeEditModal} fetchData={fetchData} eventData={selectedItem} />
             <EditVolunteerModal isOpen={editModalIsOpen && type === 'Volunteers'} onClose={closeEditModal} fetchData={fetchData} volunteerData={selectedItem} />
             <EditStoreModal isOpen={editModalIsOpen && type === 'Stores'} onClose={closeEditModal} fetchData={fetchData} storeData={selectedItem} />
+            <EditTrainingModal isOpen={editModalIsOpen && type === 'Training'} onClose={closeEditModal} fetchData={fetchData} trainingData={selectedItem} />
             <ConfirmationModal 
                 isOpen={confirmationModalIsOpen} 
                 onClose={closeConfirmationModal} 

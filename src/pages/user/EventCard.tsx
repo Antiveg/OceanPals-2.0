@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 interface EventCardProps {
   event: {
-    id: string;
+    eventId: string;
     name: string;
     place: string;
     special: boolean;
@@ -19,7 +19,7 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
   const navigate = useNavigate();
 
   const handleJoinEvent = () => {
-    navigate(`/events/${event.id}`);
+    navigate(`/events/${event.eventId}`);
   };
 
   return (

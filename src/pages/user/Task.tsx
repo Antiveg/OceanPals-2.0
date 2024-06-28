@@ -196,7 +196,7 @@ const Task: React.FC<TaskProps> = ({ userTasks, eventPoints }) => {
     return (
         <div className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-8 md:p-12 mb-8">
             <h1 className="text-gray-900 dark:text-white text-3xl md:text-5xl font-extrabold mb-2">My Task</h1>
-            <p className="text-lg font-normal text-gray-500 dark:text-gray-400 mb-6">Finish the following tasks to get points</p>
+            <p className="text-lg font-normal text-gray-500 dark:text-gray-400 mb-6">Finish the following tasks to get points! Also you could only submit the photo once!</p>
             {countdown !== null && countdown > 0 && (
                 <div className="mb-6 text-2xl font-semibold text-red-500">
                     Countdown: {formatTime(countdown)}

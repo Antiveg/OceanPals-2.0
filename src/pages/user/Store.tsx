@@ -166,7 +166,7 @@ const Store: React.FC = () => {
             </div>
           </div>
         </>
-      )}
+      )}w
 
       {isSecondModalOpen && selectedItem && (
         <>
