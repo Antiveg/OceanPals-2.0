@@ -258,7 +258,7 @@ const CRUDPanel: React.FC = () => {
     };
 
     return (
-        <section className="container px-4 mx-auto">
+        <section className="container px-4 mx-auto mt-20">
             <div className="sm:flex sm:items-center sm:justify-between">
                 <div>
                     <div className="flex items-center gap-x-3">

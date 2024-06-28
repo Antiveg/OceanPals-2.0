@@ -99,7 +99,7 @@ const EventApproval: React.FC = () => {
     };
 
     return (
-        <section className="container px-4 mx-auto">
+        <section className="container px-4 mx-auto mt-20">
             <div className="flex items-center gap-x-3 justify-between">
                 <h2 className="text-lg font-medium text-gray-800 dark:text-white">Event Approval</h2>
                 <button

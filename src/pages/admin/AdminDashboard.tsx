@@ -76,7 +76,7 @@ const AdminDashboard: React.FC = () => {
     }
 
     return (
-        <div className="container mx-auto p-4">
+        <div className="container mx-auto p-4 mt-20">
             <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-4">
                 Hello, {user?.username || "Admin"}! <span role="img" aria-label="waving">👋</span> What Would You Like to Do Today?
             </h2>

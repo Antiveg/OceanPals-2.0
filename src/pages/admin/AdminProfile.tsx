@@ -94,7 +94,7 @@ const AdminProfile: React.FC = () => {
     };
 
     return (
-        <div className="container mx-auto mt-8 text-left">
+        <div className="container mx-auto mt-8 text-left mt-20">
             <div className="max-w-xl mx-auto bg-gray-800 p-6 rounded-lg shadow-md">
                 <h2 className="text-xl font-semibold text-gray-100 mb-4">Admin Profile</h2>
                 <form onSubmit={handleSubmit}>
