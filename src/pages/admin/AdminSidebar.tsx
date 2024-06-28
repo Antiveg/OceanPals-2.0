@@ -5,10 +5,10 @@ import { useAuth } from '../../provider/AuthProvider'; // Adjust the path accord
 import { doc, getDoc } from 'firebase/firestore';
 
 const AdminSidebar: React.FC = () => {
-    const { user, loading } = useAuth();
+    const { user } = useAuth();
     const navigate = useNavigate();
     const [profilePicture, setProfilePicture] = useState<string | null>(null);
-    const [isExpanded, setIsExpanded] = useState(true);
+    const [isExpanded] = useState(true);
     const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
 
     useEffect(() => {
@@ -31,10 +31,10 @@ const AdminSidebar: React.FC = () => {
     }, [user]);
 
     useEffect(() => {
-        if (!loading && (isAdmin === false || !user)) {
+        if ((isAdmin === false || !user)) {
             navigate('/login');
         }
-    }, [loading, isAdmin, user, navigate]);
+    }, [isAdmin, user, navigate]);
 
     const handleLogout = async () => {
         try {
@@ -49,21 +49,8 @@ const AdminSidebar: React.FC = () => {
         navigate(path);
     };
 
-    const toggleSidebar = () => {
-        setIsExpanded(!isExpanded);
-    };
-
-    if (loading || isAdmin === null) {
-        return <div>Loading...</div>;
-    }
-
     return (
-        <section className={`flex flex-col ${isExpanded ? 'w-64' : 'w-20'} h-screen px-4 py-8 overflow-y-auto bg-white border-r rtl:border-r-0 rtl:border-l dark:bg-gray-900 dark:border-gray-700 transition-width duration-300`}>
-            <button onClick={toggleSidebar} className="flex items-center justify-center mb-4 text-gray-500 focus:outline-none">
-                <svg className={`w-6 h-6 transform ${isExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 12H5m7-7l-7 7 7 7" />
-                </svg>
-            </button>
+        <section className={`flex flex-col w-64 h-screen px-4 py-8 overflow-x-hidden overflow-y-auto bg-white border-r rtl:border-r-0 rtl:border-l dark:bg-gray-900 dark:border-gray-700 transition-width duration-300`}>
 
             <div className="flex flex-col items-center mt-2 -mx-2">
                 {user && (

@@ -69,7 +69,7 @@ const EventDashboard: React.FC = () => {
                                 const userData = userDoc.data();
                                 const points = event!.point;
                                 console.log(`Full points awarded: ${points}`);
-                                await updateDoc(userDocRef, { points: userData.points + points, activeEventId: '' });
+                                await updateDoc(userDocRef, { points: userData.points + points, activeEventId: '-' });
                                 alert('Your request has been approved. Thank you!');
                             }
                         }

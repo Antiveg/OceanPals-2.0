@@ -81,7 +81,7 @@ const Profile: React.FC = () => {
   };
 
   return (
-    <section className="bg-gradient-to-tr from-teal-50 to-blue-200 flex flex-col items-center justify-center py-5 px-3 text-left">
+    <section className="bg-gradient-to-tr from-teal-50 to-blue-200 flex flex-col items-center justify-center py-5 px-3 text-left h-screen">
       <div className="bg-white overflow-hidden shadow rounded-lg border">
         <div className="px-4 py-5 sm:px-6 flex flex-col items-center justify-center">
           <div className="relative inline-flex items-center justify-center w-20 h-20 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600 mb-3">

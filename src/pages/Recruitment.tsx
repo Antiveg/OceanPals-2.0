@@ -1,7 +1,35 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../FirebaseConfig';
+
+interface Volunteer {
+  id: string;
+  name: string;
+  shortDescription: string;
+}
 
 const Recruitment: React.FC = () => {
+  const [volunteers, setVolunteers] = useState<Volunteer[]>([]);
+
+  useEffect(() => {
+    const fetchVolunteers = async () => {
+      const querySnapshot = await getDocs(collection(db, 'Volunteers'));
+      const volunteersList: Volunteer[] = [];
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        volunteersList.push({
+          id: doc.id,
+          name: data.name,
+          shortDescription: data.shortDescription,
+        });
+      });
+      setVolunteers(volunteersList);
+    };
+
+    fetchVolunteers();
+  }, []);
+
   return (
     <section className="bg-gradient-to-tr from-teal-50 to-blue-200 py-10">
       <div className="py-16 bg-white">
@@ -41,59 +69,20 @@ const Recruitment: React.FC = () => {
             <span className="text-gray-600 text-lg font-semibold">Volunteer Division</span>
             <h2 className="mt-4 text-2xl text-gray-900 font-bold md:text-4xl">Choose 1 of 4 OceanPals Volunteer Divisions</h2>
           </div>
-          <div className="mt-16 grid border divide-x divide-y rounded-xl overflow-hidden sm:grid-cols-2 lg:divide-y-0 lg:grid-cols-3 xl:grid-cols-4">
-            <div className="relative group bg-white transition hover:z-[1] hover:shadow-2xl">
-              <div className="relative p-8 space-y-8">
-                <img src="/assets/volunteer/marketing-icon.svg" className="w-10" width="512" height="512" alt="Marketing Division" />
-                <div className="space-y-2">
-                  <h5 className="text-2xl text-gray-800 font-medium transition group-hover:text-blue-700">Marketing Division</h5>
-                  <p className="text-lg text-gray-600">This division represents the face of OceanPals. Your task is to promote the OceanPals activity and recruit new volunteers!</p>
+          <div className="mt-16 grid border divide-x divide-y rounded-xl overflow-hidden sm:grid-cols-2 lg:divide-y-0 lg:grid-cols-3 xl:grid-cols-4 text-left">
+            {volunteers.map((volunteer) => (
+              <div key={volunteer.id} className="relative group bg-white transition hover:z-[1] hover:shadow-2xl">
+                <div className="relative p-8 space-y-8">
+                  <div className="space-y-6">
+                    <h5 className="text-2xl text-gray-800 font-medium transition group-hover:text-blue-700">{volunteer.name}</h5>
+                    <p className="text-lg text-gray-600">{volunteer.shortDescription}</p>
+                  </div>
+                  <Link to={`/recruitment/${volunteer.id}`} className="flex justify-between items-center group-hover:text-blue-700">
+                    <span className="text-sm">Read more</span>
+                  </Link>
                 </div>
-                <Link to="/recruitment/detail" className="flex justify-between items-center group-hover:text-blue-700">
-                  <span className="text-sm">Read more</span>
-                  <span className="-translate-x-4 opacity-0 text-2xl transition duration-300 group-hover:opacity-100 group-hover:translate-x-0">&RightArrow;</span>
-                </Link>
               </div>
-            </div>
-            <div className="relative group bg-white transition hover:z-[1] hover:shadow-2xl">
-              <div className="relative p-8 space-y-8">
-                <img src="/assets/volunteer/beach-icon.svg" className="w-10" width="512" height="512" alt="Beach Combing Division" />
-                <div className="space-y-2">
-                  <h5 className="text-2xl text-gray-800 font-medium transition group-hover:text-blue-700">Beach Combing Division</h5>
-                  <p className="text-lg text-gray-600">Participate as the representative of OceanPals on cleaning the beach! Benefits you get are exclusive merchandise, bonus fees, and more!</p>
-                </div>
-                <Link to="/recruitment/detail" className="flex justify-between items-center group-hover:text-blue-700">
-                  <span className="text-sm">Read more</span>
-                  <span className="-translate-x-4 opacity-0 text-2xl transition duration-300 group-hover:opacity-100 group-hover:translate-x-0">&RightArrow;</span>
-                </Link>
-              </div>
-            </div>
-            <div className="relative group bg-white transition hover:z-[1] hover:shadow-2xl">
-              <div className="relative p-8 space-y-8">
-                <img src="/assets/volunteer/computer-icon.svg" className="w-10" width="512" height="512" alt="IT Development" />
-                <div className="space-y-2">
-                  <h5 className="text-2xl text-gray-800 font-medium transition group-hover:text-blue-700">IT Development</h5>
-                  <p className="text-lg text-gray-600">Help us maintain the integrity structures of our website! Ensuring there are no bugs and uneaseness for users</p>
-                </div>
-                <Link to="/recruitment/detail" className="flex justify-between items-center group-hover:text-blue-700">
-                  <span className="text-sm">Read more</span>
-                  <span className="-translate-x-4 opacity-0 text-2xl transition duration-300 group-hover:opacity-100 group-hover:translate-x-0">&RightArrow;</span>
-                </Link>
-              </div>
-            </div>
-            <div className="relative group bg-white transition hover:z-[1] hover:shadow-2xl">
-              <div className="relative p-8 space-y-8">
-                <img src="/assets/volunteer/event-icon.svg" className="w-10" width="512" height="512" alt="Event Organizer" />
-                <div className="space-y-2">
-                  <h5 className="text-2xl text-gray-800 font-medium transition group-hover:text-blue-700">Event Organizer</h5>
-                  <p className="text-lg text-gray-600">Envision your own plans by creating OceanPals events for beach cleaning! You could ask cooperation with other companies or by yourself</p>
-                </div>
-                <Link to="/recruitment/detail" className="flex justify-between items-center group-hover:text-blue-700">
-                  <span className="text-sm">Read more</span>
-                  <span className="-translate-x-4 opacity-0 text-2xl transition duration-300 group-hover:opacity-100 group-hover:translate-x-0">&RightArrow;</span>
-                </Link>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>

@@ -39,7 +39,7 @@ const Ranking: React.FC = () => {
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   return (
-    <section className="bg-gradient-to-tr from-teal-50 to-blue-200 flex flex-col items-center justify-center py-5 px-3">
+    <section className="bg-gradient-to-tr from-teal-50 to-blue-200 flex flex-col items-center justify-center py-5 px-3 h-screen">
       <div className="w-full max-w-screen-md p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
         <div className="flex items-center justify-between mb-4">
           <h5 className="text-xl font-bold leading-none text-gray-900 dark:text-white">OceanPals Ranking</h5>

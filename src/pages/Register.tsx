@@ -34,7 +34,8 @@ function Register() {
             await setDoc(doc(db, 'Users', user.uid), {
                 username,
                 email,
-                role: 'member'
+                role: 'member',
+                point: 0
             });
 
             toast.success('Registered successfully');
