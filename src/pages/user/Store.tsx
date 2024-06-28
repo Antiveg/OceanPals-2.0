@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { collection, getDocs, doc, updateDoc, getDoc } from 'firebase/firestore';
-import { db } from '../FirebaseConfig';
-import { useAuth } from '../provider/AuthProvider';
+import { db } from '../../FirebaseConfig';
+import { useAuth } from '../../provider/AuthProvider';
 import { useNavigate } from 'react-router-dom';
 
 interface StoreItem {

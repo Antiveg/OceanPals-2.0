@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { doc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
-import { db } from '../FirebaseConfig';
-import { useAuth } from '../provider/AuthProvider';
+import { db } from '../../FirebaseConfig';
+import { useAuth } from '../../provider/AuthProvider';
 
 interface VolunteerDetail {
   name: string;
