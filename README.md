@@ -12,7 +12,7 @@
 ## Table of Contents
 1. [Project Overview](#project-overview)
 2. [Mockup Screenshot](#mockup-screenshot)
-3. [Web Demo](#web-demo)
+3. [Technology and Infrastructure](#technology-and-infrastructure)
 4. [Prerequisite](#prerequisite)
 5. [How to Run Project Locally](#how-to-run-project-locally)
 6. [Owner](#owner)
@@ -23,59 +23,82 @@
 OceanPals
 
 ### Explanation
-
-DentalHealth is a perfect place to consult about your dental health for an affordable price! Not only that, we also provide advanced technology to help you understand your teeth better. Trusted by many, DentalHealth is here to assist you too! So what are you waiting for? Start using DentalHealth now! ❤️‍🔥✨
+OceanPals is an interactive web platform designed to raise awareness about environmental cleanliness, with a special focus on keeping beaches clean. Through OceanPals, users are encouraged to participate in beachcombing—the activity of collecting litter and debris from beaches to help protect marine life and maintain a clean coastal environment. As users log their beachcombing efforts, they earn points that can be accumulated and later redeemed for exclusive rewards. By combining environmental action with a gamified experience, OceanPals motivates individuals to take meaningful steps toward sustainability while making beach cleaning an engaging and rewarding activity. Join OceanPals and be part of the movement for cleaner, healthier oceans! 🌊♻️
 
 ## Mockup Screenshot
 
-* Home Page - Main Feature Selection
+### User Side Interface
+
+* User Page - Login and Register
 
 <p align="center">
-  <img src = "https://res.cloudinary.com/dxcn5osfu/image/upload/f_auto,q_auto/v1/DentalHealth/xe2dixyvuw0ludqoh3zc" width=700>
+  <img src = "https://res.cloudinary.com/dxcn5osfu/image/upload/f_auto,q_auto/v1/OceanPals/m0ogzim7dokkf1wdiqs1" width=700>
 </p>
 
-* Chatbot Page
+* Home Page - Dashboard of OceanPals
 
 <p align="center">
-  <img src = "https://res.cloudinary.com/dxcn5osfu/image/upload/f_auto,q_auto/v1/DentalHealth/fsjtmrxun4z2g7w0fl2g" width=700>
+  <img src = "https://res.cloudinary.com/dxcn5osfu/image/upload/f_auto,q_auto/v1/OceanPals/pjxdtwstel8awavpxjqn" width=700>
 </p>
 
-* Teeth Checking Page
+* Event Page - Live Maps of Active Events
 
 <p align="center">
-  <img src = "https://res.cloudinary.com/dxcn5osfu/image/upload/f_auto,q_auto/v1/DentalHealth/sjujnrrzhampna1hplke" width=700>
+  <img src = "https://res.cloudinary.com/dxcn5osfu/image/upload/f_auto,q_auto/v1/OceanPals/smoedo3mtknuy33jkqjq" width=700>
+  <img src = "https://res.cloudinary.com/dxcn5osfu/image/upload/f_auto,q_auto/v1/OceanPals/vmpgvlz9548zdlkaerb7" width=700>
+  <img src = "https://res.cloudinary.com/dxcn5osfu/image/upload/f_auto,q_auto/v1/OceanPals/aq7g7w1ey0frjuum7hcr" width=700>
 </p>
 
-* Article Page
+* Recruitment Page - Volunteer of Becoming OceanPals Fellow
 
 <p align="center">
-  <img src = "https://res.cloudinary.com/dxcn5osfu/image/upload/f_auto,q_auto/v1/DentalHealth/yczw7gxrlxd4f7uzw5hk" width=700>
+  <img src = "https://res.cloudinary.com/dxcn5osfu/image/upload/f_auto,q_auto/v1/OceanPals/femlhxbpnwow7zoqu64k" width=700>
+  <img src = "https://res.cloudinary.com/dxcn5osfu/image/upload/f_auto,q_auto/v1/OceanPals/bhyggo4fa1fs6hgzhttg" width=700>
 </p>
 
-## Web Demo
-
-* Teeth Checking - Utilizing CNN Model
+* Training Page - Learning New Things about Environmental Cleaning
 
 <p align="center">
-  <img src = "https://res.cloudinary.com/dxcn5osfu/image/upload/f_auto,q_auto/v1/DentalHealth/rxk7uo4nq6bj4853qzq3" width=700>
+  <img src = "https://res.cloudinary.com/dxcn5osfu/image/upload/f_auto,q_auto/v1/OceanPals/ueq2gvvzqrf8duurfuir" width=700>
+  <img src = "https://res.cloudinary.com/dxcn5osfu/image/upload/f_auto,q_auto/v1/OceanPals/oizkg81lf4rpl0y9xoj3" width=700>
 </p>
 
-* Chatbot - Powered by Deepseek R1:8b
+* Store Page - Redeem your Beachcombing Points with Merchandise
 
 <p align="center">
-  <img src = "https://res.cloudinary.com/dxcn5osfu/image/upload/f_auto,q_auto/v1/DentalHealth/i1zatnvyy8akk0gcfjga" width=700>
+  <img src = "https://res.cloudinary.com/dxcn5osfu/image/upload/f_auto,q_auto/v1/OceanPals/r9vgekb0z32ru9ntuhll" width=700>
 </p>
 
-### Technology and Infrastructure
+### Admin Side Interface
+
+* Admin Dashboard Page - Overview the Current State Data of OceanPals
+
+<p align="center">
+  <img src = "https://res.cloudinary.com/dxcn5osfu/image/upload/f_auto,q_auto/v1/OceanPals/kjtvcszz2vi5lovabg95" width=700>
+</p>
+
+* Forum Page - Brief Activity with Fellow Beachcombers
+
+<p align="center">
+  <img src = "https://res.cloudinary.com/dxcn5osfu/image/upload/f_auto,q_auto/v1/OceanPals/yjo9ppolxff4h8pllqn1" width=700>
+</p>
+
+* CRUD Page - Sample CRUD for Managing Data
+
+<p align="center">
+  <img src = "https://res.cloudinary.com/dxcn5osfu/image/upload/f_auto,q_auto/v1/OceanPals/cgugnbytsynj4ja5grhh" width=700>
+</p>
+
+## Technology and Infrastructure
 
 This project is built using modern web development tools and frameworks:
-- **Frontend Framework**: [Next.js](https://nextjs.org/) (React-based framework for server-side rendering and static site generation)
-- **Styling**: [TailwindCSS](https://tailwindcss.com/) (Utility-first CSS framework for fast UI development)
-- **Backend Framework**: [FastAPI](https://fastapi.tiangolo.com/) (Python framework for building APIs)
-- **AI Model**: PyTorch-based deep learning models
-- **Programming Languages**: JavaScript/TypeScript (frontend), Python (backend)
-- **Package Manager**: npm or yarn for frontend; pip for backend
-- **Deployment**: [Vercel](https://vercel.com/) for frontend, and [AWS/Google Cloud/Heroku] for backend (optional)
+
+- **Frontend Framework**: [React](https://react.dev/) with [Vite](https://vitejs.dev/) (Fast and modern frontend tooling)
+- **Styling**: [TailwindCSS](https://tailwindcss.com/) (Utility-first CSS framework for efficient UI development)
+- **Backend & Database**: [Firebase](https://firebase.google.com/) (Serverless backend, authentication, and real-time database)
+- **Programming Language**: TypeScript (Frontend)
+- **Package Manager**: npm
+- **Deployment**: [Vercel](https://vercel.com/) for frontend hosting
 
 ## Prerequisite
 
@@ -91,17 +114,7 @@ Before running this project, ensure the following tools are installed on your sy
      npm -v
      ```
 
-2. **Python:**
-   - Install Python (version **3.9** or newer).  
-     Download Python from [here](https://www.python.org/).
-   - Verify installation by running:
-
-     ```bash
-     python --version
-     pip --version
-     ```
-
-3. **Git:**
+2. **Git:**
    - Install Git to clone the repository from GitHub.  
      Download Git from [here](https://git-scm.com/).  
      Verify installation using:
@@ -110,37 +123,65 @@ Before running this project, ensure the following tools are installed on your sy
      git --version
      ```
 
-4. **Code Editor:**
-   - Install [Visual Studio Code (VS Code)](https://code.visualstudio.com/) or any editor of your choice.  
-     Ensure you have the following extensions for VS Code:
-     - **ESLint**
-     - **Prettier - Code formatter**
-     - **Python**
-     - **TailwindCSS IntelliSense**
-
-5. **Virtual Environment (Python):**
-   - Install `virtualenv` or `venv` to create isolated environments for Python dependencies:
+3. **Firebase CLI:**
+   - Install Firebase CLI for managing Firebase services:
 
      ```bash
-     pip install virtualenv
+     npm install -g firebase-tools
      ```
 
-6. **Browser:**
+   - Verify installation by running:
+
+     ```bash
+     firebase --version
+     ```
+
+4. **Code Editor:**
+   - Install [Visual Studio Code (VS Code)](https://code.visualstudio.com/) or any editor of your choice.  
+     Recommended VS Code extensions:
+     - **ESLint**
+     - **Prettier - Code formatter**
+     - **TailwindCSS IntelliSense**
+     - **Firebase Explorer**
+     - **React Developer Tools**
+
+5. **Browser:**
    - Use a modern browser like [Google Chrome](https://www.google.com/chrome/) or [Firefox](https://www.mozilla.org/).
+
+6. **Environment Variables:**
+   - Set up your Firebase project and obtain the necessary configuration.  
+     Create a `.env` file in the root directory and add:
+
+     ```env
+     VITE_FIREBASE_API_KEY=your_api_key
+     VITE_FIREBASE_AUTH_DOMAIN=your_auth_domain
+     VITE_FIREBASE_PROJECT_ID=your_project_id
+     VITE_FIREBASE_STORAGE_BUCKET=your_storage_bucket
+     VITE_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
+     VITE_FIREBASE_APP_ID=your_app_id
+     ```
+
+     Replace `your_api_key`, `your_auth_domain`, etc., with your Firebase project details.
+
+Once these prerequisites are installed and configured, you can proceed with setting up the project.
 
 ## How to Run Project Locally
 
 Follow these steps to set up and run the project locally on your machine:
 
----
+### Frontend (React + Vite)
 
-### Frontend (Next.js)
-
-#### 1. Navigate to the Frontend Directory
-   - Navigate to the `frontend` folder:
+#### 1. Clone the Repository
+   - Clone the project from GitHub:
 
      ```bash
-     cd frontend
+     git clone https://github.com/your-repo-name.git
+     ```
+
+   - Navigate to the project directory:
+
+     ```bash
+     cd your-project-name
      ```
 
 #### 2. Install Dependencies
@@ -150,69 +191,60 @@ Follow these steps to set up and run the project locally on your machine:
      npm install
      ```
 
-#### 3. Start the Development Server
+#### 3. Set Up Environment Variables
+   - Create a `.env` file in the root directory and add your Firebase configuration:
+
+     ```env
+     VITE_FIREBASE_API_KEY=your_api_key
+     VITE_FIREBASE_AUTH_DOMAIN=your_auth_domain
+     VITE_FIREBASE_PROJECT_ID=your_project_id
+     VITE_FIREBASE_STORAGE_BUCKET=your_storage_bucket
+     VITE_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
+     VITE_FIREBASE_APP_ID=your_app_id
+     ```
+
+   - Replace `your_api_key`, `your_auth_domain`, etc., with your Firebase project details.
+
+#### 4. Start the Development Server
    - Run the following command to start the development server:
 
      ```bash
      npm run dev
      ```
 
-   - By default, the application will run on `http://localhost:3000`.
+   - By default, the application will run on `http://localhost:5173`.
 
 ---
 
-### Backend (AI Model API)
+### Firebase Setup (Backend & Database)
 
-#### 1. Navigate to the Model Directory
-   - Open a new terminal and navigate to the `model` folder:
-
-     ```bash
-     cd model
-     ```
-
-#### 2. Set Up Python Environment
-   - Create a virtual environment to isolate dependencies:
+#### 1. Login to Firebase CLI
+   - Ensure you are logged into Firebase:
 
      ```bash
-     python -m venv venv
+     firebase login
      ```
 
-   - Activate the virtual environment:
-     - On **Windows**:
-       ```bash
-       venv\Scripts\activate
-       ```
-     - On **macOS/Linux**:
-       ```bash
-       source venv/bin/activate
-       ```
-
-#### 3. Install Python Dependencies
-   - Install the required libraries listed in `requirements.txt`:
+#### 2. Initialize Firebase (If Not Already Set Up)
+   - If this is your first time setting up Firebase for the project:
 
      ```bash
-     pip install -r requirements.txt
+     firebase init
      ```
 
-#### 4. Start the Backend API
-   - Run the Python API server:
+   - Follow the setup process:
+     - Choose **Firestore** for the database.
+     - Enable **Authentication** if required.
+     - Select the appropriate Firebase project.
+
+#### 3. Start Firebase Emulators (Optional for Local Testing)
+   - If you want to test Firebase locally, run:
 
      ```bash
-     python modelAPI.py
+     firebase emulators:start
      ```
 
-   - By default, the API will run on `http://localhost:8000`.
-
----
-
-### Integration and Testing
-
-#### 1. Connect Frontend with Backend
-   - Update the frontend API configuration file (e.g., `.env` or API service file) to point to the backend server at `http://localhost:8000`.
-
-#### 2. Test the Application
-   - Open your browser and visit [http://localhost:3000](http://localhost:3000).
-   - Use the features of the application, which interact with the AI model hosted on the backend.
+Once everything is set up, your project should be running locally. 🚀
 
 ---
 
@@ -220,18 +252,14 @@ Follow these steps to set up and run the project locally on your machine:
 #### Frontend:
    - Deploy the frontend to [Vercel](https://vercel.com/).  
      Follow [these steps](https://vercel.com/docs).
-
-#### Backend:
-   - Deploy the Python API to platforms like [AWS](https://aws.amazon.com/), [Google Cloud](https://cloud.google.com/), or [Heroku](https://www.heroku.com/).
-
+     
 ---
 
 ## Owner
 
 This Repository is created by:
-- 2702217125 - Stanley Nathanael Wijaya
 - 2702211185 - Christopher Hardy Gunawan
-- 2702217043 - Christine Kosasih
-- 2702218153 - Olivia Tiffany
+- 2702265534 - Aurelia Tera Puspita
+- 2702210680 - Stanic Dylan
 
-<code> Striving for Excellence ❤️‍🔥❤️‍🔥 </code>
+<code> Let's Make Our World a Better Place ❤️‍🔥❤️‍🔥 </code>
